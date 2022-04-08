@@ -1,6 +1,23 @@
+/* Charlie is unaware, has mail account and has read access to the file server */
 unawareness(charlie).
+insiderness(charlie).
 hasMailAccount(charlie).
-isWebServer(company_website).
-vulExists(company_website, 'SQL Injection', data_disclosure).
+hasAccess(charlie, file_server, read).
 
-attackGoal(dataExfiltration(data_disclosure)).
+/* Admin makes mistakes */
+humanError(admin).
+isAdminOf(admin, company_website).
+isWebServer(company_website).
+/* Unawareness */
+unawareness(admin).
+/*hasMailAccount(admin).*/
+hasAccess(admin, file_server, read).
+hasAccess(admin, company_website, read).
+
+/* Vulnerabilities */
+vulExists(company_website, 'SQL Injection', data_disclosure).
+vulExists(apache_axis, 'Apache Axis2 information disclosure', data_disclosure).
+
+attackGoal(dataExfiltration(data, file_server)).
+attackGoal(dataExfiltration(data, company_website)).
+attackGoal(employeeStealsData(data, file_server)).
