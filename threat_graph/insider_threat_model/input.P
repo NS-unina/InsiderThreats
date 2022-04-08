@@ -1,0 +1,6 @@
+unawareness(charlie).
+hasMailAccount(charlie).
+isWebServer(company_website).
+vulExists(company_website, 'SQL Injection', data_disclosure).
+
+attackGoal(dataExfiltration(data_disclosure)).

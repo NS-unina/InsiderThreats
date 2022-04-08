@@ -1,0 +1,27 @@
+/*Predicates declarations*/
+primitive(attackerLocated(_location)).
+primitive(hacl(_src, _dst, _prot, _port)).
+primitive(vulExists(_host, _vulID, _program)).
+primitive(vulProperty(_vulID, _range, _consequence)).
+primitive(progRunning(_program, _host)).
+
+derived(execCode(_host, _permission)).
+derived(netAccess(_host, _protocol, _port)).
+
+meta(attackGoal(_)).
+
+/* Tabling predicates */
+:- table execCode/2.
+:- table netAccess/3.
+
+/* interaction rules */
+interaction_rule(
+	(execCode(Host, root) :- vulExists(Host, _, Program), progRunning(Program, Host), netAccess(Host, _, _)),
+	rule_desc('Vulnerable program is running on remotely accessible host', 2)).
+
+interaction_rule(
+	(netAccess(H, Protocol, Port) :-
+		attackerLocated(Zone),
+		hacl(Zone, H, Protocol, Port)),
+	rule_desc('direct network access', 1)).
+

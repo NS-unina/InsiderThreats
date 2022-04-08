@@ -1,0 +1,52 @@
+/*Predicates declarations*/
+primitive(unawareness(_victim)).
+primitive(hasMailAccount(_victim)).
+/* consequences could be data disclosure or remote code execution */
+primitive(vulExists(_host, _vulID, _consequence)).
+primitive(isWebServer(_host)).
+
+derived(spearPhishing(_victim, _disclosure)).
+derived(webVulnerability(_host, _consequence)).
+derived(dataExfiltration(_data)).
+
+meta(attackGoal(_)).
+
+/* Tabling predicates */
+:- table webVulnerability/11.
+:- table spearPhishing/8.
+:- table dataExfiltration/17.
+
+
+
+/******************************************************/
+/****         Exploitation threats                        *****/
+/******************************************************/
+
+/*interaction_rule(
+    (ransomwareAttack(Host) :- isVulnerable(Host)), 
+    rule_desc('Ransomware attack against a target', 3)).*/
+
+/******************************************************/
+/****         Vector threats                        *****/
+/******************************************************/
+
+
+
+/* TID_11 */
+interaction_rule(
+    (webVulnerability(Host, DataDisclosure) :- vulExists(Host, _, DataDisclosure), isWebServer(Host)),
+    rule_desc('A web vulnerability discloses data from webserver', 11)).
+
+/* TID_08 */
+interaction_rule(
+    (spearPhishing(Victim, DataDisclosure) :- hasMailAccount(Victom), unawareness(Victim)),
+    rule_desc('An employee falls victim to a spear phising attack', 8)).
+
+    
+/* TID_17 */
+interaction_rule(
+    (dataExfiltration(DataDisclosure) :- webVulnerability(Host, DataDisclosure)),
+    rule_desc('Data exfiltration from a company asset', 17)).
+interaction_rule(
+    (dataExfiltration(DataDisclosure) :- spearPhishing(Victim, DataDisclosure)),
+    rule_desc('Data exfiltration from a company asset', 17)).
