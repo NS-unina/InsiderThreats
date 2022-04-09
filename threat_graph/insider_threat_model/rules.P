@@ -54,6 +54,21 @@ primitive(hasCredentialBreached(victim)).
 /* The employee uses a personal password on the host */
 primitive(reusePassword(victim, Host)).
 
+/**** GLOBAL PRIMITIVE THREATS *******/
+primitive(tid01(_)).
+primitive(tid02(_)).
+primitive(tid03(_)).
+primitive(tid04(_)).
+primitive(tid05(_)).
+primitive(tid06(_)).
+primitive(tid08(_)).
+primitive(tid10(_)).
+primitive(tid11(_)).
+primitive(tid13(_)).
+primitive(tid15(_)).
+primitive(tid17(_)).
+primitive(tid23(_)).
+
 derived(spearPhishing(_host, _consequence)).
 derived(webExecVulnerability(_host, _consequence)).
 derived(webDisclosureVulnerability(_host, _consequence)).
@@ -95,20 +110,20 @@ meta(attackGoal(_)).
 /****         Ransowmare                                    *****/
 /* TID_02 */
 interaction_rule(
-    (ransomwareAttack(Host) :- execVulnerability(Host, Vuln)), 
+    (ransomwareAttack(Host) :- execVulnerability(Host, Vuln), tid02(_)), 
     rule_desc('TID_02 - Ransomware attack against a target', 3)).
 interaction_rule(
-    (ransomwareAttack(Host) :- webExecVulnerability(Host, Vuln)), 
+    (ransomwareAttack(Host) :- webExecVulnerability(Host, Vuln), tid02(_)), 
     rule_desc('TID_02 - Ransomware attack against a target', 3)).
 interaction_rule(
-    (ransomwareAttack(Host) :- spearPhishing(Host, exec)), 
+    (ransomwareAttack(Host) :- spearPhishing(Host, exec), tid02(_)), 
     rule_desc('TID_02 - Ransomware attack against a target', 3)).
 interaction_rule(
-    (ransomwareAttack(Host) :- discoverWeakPassword(Host, exec)), 
+    (ransomwareAttack(Host) :- discoverWeakPassword(Host, exec), tid02(_)), 
     rule_desc('TID_02 - Ransomware attack against a target', 3)).
 
 interaction_rule(
-    (ransomwareAttack(Host) :- credentialStuffing(Host, CodeExecution)), 
+    (ransomwareAttack(Host) :- credentialStuffing(Host, CodeExecution), tid02(_)), 
     rule_desc('TID_02 - Ransomware attack against a target', 3)).
 
 
@@ -116,42 +131,42 @@ interaction_rule(
 /****         Information disclosure                                    *****/
 /* TID_17 */
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- webDisclosureVulnerability(Host, Vuln)),
+    (dataExfiltration(DataDisclosure, Host) :- webDisclosureVulnerability(Host, Vuln), tid17(_)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- discloseVulnerability(Host, Vuln)),
+    (dataExfiltration(DataDisclosure, Host) :- discloseVulnerability(Host, Vuln), tid17(_)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- spearPhishing(Host, read)),
+    (dataExfiltration(DataDisclosure, Host) :- spearPhishing(Host, read), tid17(_)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- unsecureDataStorage(Host)),
+    (dataExfiltration(DataDisclosure, Host) :- unsecureDataStorage(Host), tid17(_)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 interaction_rule(
-    (dataExfiltration(Data, Host) :- discoverWeakPassword(Host, read)),
-    rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
-
-interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- credentialStuffing(Host, DataDisclosure)),
+    (dataExfiltration(Data, Host) :- discoverWeakPassword(Host, read), tid17(_)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Asset) :- skimmingDevice(Attacker, Asset)),
+    (dataExfiltration(DataDisclosure, Host) :- credentialStuffing(Host, DataDisclosure), tid17(_)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 
-
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Asset) :- getDataFromStolenAsset(Data, Asset)),
+    (dataExfiltration(DataDisclosure, Asset) :- skimmingDevice(Attacker, Asset), tid17(_)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 
 
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- employeeStealsData(DataDisclosure, Host)),
+    (dataExfiltration(DataDisclosure, Asset) :- getDataFromStolenAsset(Data, Asset), tid17(_)),
+    rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
+
+
+interaction_rule(
+    (dataExfiltration(DataDisclosure, Host) :- employeeStealsData(DataDisclosure, Host), tid17(_)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 
 interaction_rule(
-    (dataExfiltration(DataDisclosure, MailContent) :- sensitiveInformationThroughEmail(DataDisclosure, MailContent)),
+    (dataExfiltration(DataDisclosure, MailContent) :- sensitiveInformationThroughEmail(DataDisclosure, MailContent), tid17(_)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 
 
@@ -162,24 +177,24 @@ interaction_rule(
 
 /* TID_04 */
 interaction_rule(
-    (employeeStealsData(Data, Host) :- insiderness(Employee), hasAccess(Employee, Host, read)),
+    (employeeStealsData(Data, Host) :- insiderness(Employee), hasAccess(Employee, Host, read), tid04(_)),
     rule_desc('TID_04 - An internal employee uses privileged access to steal sensitive data', 4)).
     
 
 interaction_rule(
-    (employeeStealsData(Data, Host) :- insiderness(Employee), hasAccess(Employee, Host, exec)),
+    (employeeStealsData(Data, Host) :- insiderness(Employee), hasAccess(Employee, Host, exec), tid04(_)),
     rule_desc('TID_04 - An internal employee uses privileged access to steal sensitive data', 4)).
     
 
 /* TID_06 */
 interaction_rule(
-    (sensitiveInformationThroughEmail(Data, MailContent) :- isSendingMail(Victim, MailContent), hasMailAccount(Victim), humanError(Victim)),
+    (sensitiveInformationThroughEmail(Data, MailContent) :- isSendingMail(Victim, MailContent), hasMailAccount(Victim), humanError(Victim), tid06(_)),
     rule_desc('TID_06 - Sensitive information errounesly disclosed by mail', 4)).
     
 
 /* TID_23 */
 interaction_rule(
-    (disclosureThroughSocial(Data) :- unawareness(Victim), useSocial(Victim)),
+    (disclosureThroughSocial(Data) :- unawareness(Victim), useSocial(Victim), tid23(_)),
     rule_desc('An employee', 23)).
 
 /******************************************************/
@@ -188,61 +203,61 @@ interaction_rule(
 
 /* TID_01 */
 interaction_rule(
-    (unsecureDataStorage(Host) :- isDataStorage(Host), isAdminOf(User, Host), humanError(User), isPublic(Host)),
+    (unsecureDataStorage(Host) :- isDataStorage(Host), isAdminOf(User, Host), humanError(User), isPublic(Host), tid01(_)),
     rule_desc('TID_01 - Unsecure data storage', 1)).
 
 
 /* TID_03 */
 interaction_rule(
-    (skimmingDevice(Attacker, Host) :- hasPhysicalAccess(Attacker, Host)),
+    (skimmingDevice(Attacker, Host) :- hasPhysicalAccess(Attacker, Host), tid03(_)),
     rule_desc('TID_03 - The attacker installs a skimming device to exfiltrate data', 1)).
 
 
 /* TID_05 */
 interaction_rule(
-    (execVulnerability(Host, Vuln) :- vulExists(Host, Vuln, code_exec), noWeb(Vuln)),
+    (execVulnerability(Host, Vuln) :- vulExists(Host, Vuln, code_exec), noWeb(Vuln), tid05(_)),
     rule_desc('TID_05 - A service vulnerability allows code execution', 5)).
 interaction_rule(
-    (discloseVulnerability(Host, Vuln) :- vulExists(Host, Vuln, information_disclosure), noWeb(Vuln)),
+    (discloseVulnerability(Host, Vuln) :- vulExists(Host, Vuln, information_disclosure), noWeb(Vuln), tid05(_)),
     rule_desc('TID_05 - A service vulnerability allows code execution', 5)).
 
 
 /* TID_08 */
 interaction_rule(
-    (spearPhishing(Host, read) :- hasMailAccount(Victim), unawareness(Victim), hasAccess(Victim, Host, read)),
+    (spearPhishing(Host, read) :- hasMailAccount(Victim), unawareness(Victim), hasAccess(Victim, Host, read), tid08(_)),
     rule_desc('TID_08 - An employee falls victim to a spear phising attack', 8)).
 interaction_rule(
-    (spearPhishing(Host, exec) :- hasMailAccount(Victim), unawareness(Victim), hasAccess(Victim, Host, exec)),
+    (spearPhishing(Host, exec) :- hasMailAccount(Victim), unawareness(Victim), hasAccess(Victim, Host, exec), tid08(_)),
     rule_desc('TID_08 - An employee falls victim to a spear phising attack', 8)).
 
 /* TID_10 */
 interaction_rule(
-    (getDataFromStolenAsset(Data, Asset) :- hasPhysicalAccess(Attacker, Asset)),
+    (getDataFromStolenAsset(Data, Asset) :- hasPhysicalAccess(Attacker, Asset), tid10(_)),
     rule_desc('TID_10 - An attacker steals asset', 10)).
     
 /* TID_11 */
 interaction_rule(
-    (webDisclosureVulnerability(Host, Vuln) :- vulExists(Host, Vuln, information_disclosure), isWeb(Vuln)),
+    (webDisclosureVulnerability(Host, Vuln) :- vulExists(Host, Vuln, information_disclosure), isWeb(Vuln), tid11(_)),
     rule_desc('TID_11 - A web vulnerability affects the webserver', 11)).
 
 interaction_rule(
-    (webExecVulnerability(Host, Vuln) :- vulExists(Host, Vuln, code_exec), isWeb(Vuln)),
+    (webExecVulnerability(Host, Vuln) :- vulExists(Host, Vuln, code_exec), isWeb(Vuln), tid11(_)),
     rule_desc('TID_11 - A web vulnerability affects the webserver', 11)).
 
 /* TID_13 */
 interaction_rule(
-    (discoverWeakPassword(Host, read) :- unawareness(Victim), hasAccess(Victim, Host, read)),
+    (discoverWeakPassword(Host, read) :- unawareness(Victim), hasAccess(Victim, Host, read), tid13(_)),
     rule_desc('TID_13 - An attacker discovers a weak password', 13)).
 /* TID_13 */
 interaction_rule(
-    (discoverWeakPassword(Host, exec) :- unawareness(Victim), hasAccess(Victim, Host, exec)),
+    (discoverWeakPassword(Host, exec) :- unawareness(Victim), hasAccess(Victim, Host, exec), tid13(_)),
     rule_desc('TID_13 - An attacker discovers a weak password', 13)).
 
 /* TID_15 */
 interaction_rule(
-    (credentialStuffing(Host, DataDisclosure) :- reusePassword(Victim, Host), hasAccess(Employee, Host, read)),
+    (credentialStuffing(Host, DataDisclosure) :- reusePassword(Victim, Host), hasAccess(Employee, Host, read), tid15(_)),
     rule_desc('TID_15 - An attacker reuse credentials obtained from Dark Web to access to the host', 15)).
 
 interaction_rule(
-    (credentialStuffing(Host, CodeExecution) :- reusePassword(Victim, Host), hasAccess(Employee, Host, exec)),
+    (credentialStuffing(Host, CodeExecution) :- reusePassword(Victim, Host), hasAccess(Employee, Host, exec), tid15(_)),
     rule_desc('TID_15 - An attacker reuse credentials obtained from Dark Web to access to the host', 15)).

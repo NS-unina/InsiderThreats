@@ -6,6 +6,20 @@ unawareness(administrator).
 /*humanError(charlie).
 humanError(daniel).
 */
+/* Global threat probability */
+tid01(_).
+tid02(_).
+tid03(_).
+tid04(_).
+tid05(_).
+tid06(_).
+tid08(_).
+tid10(_).
+tid11(_).
+tid13(_).
+tid15(_).
+tid17(_).
+tid23(_).
 
 humanError(administrator).
 
