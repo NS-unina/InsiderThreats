@@ -19,6 +19,7 @@ hasMailAccount(daniel).
 hasMailAccount(administrator).
 
 isDataStorage(elastic_search).
+isPublic(elastic_search).
 isDataStorage(file_server).
 
 hasAccess(charlie, file_server, read).

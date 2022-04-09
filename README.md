@@ -10,4 +10,5 @@ Some information:
 * utils/mulval_rules.P contains the list of rules provided by mulval (https://github.com/risksense/mulval/blob/master/kb/interaction_rules.P)
 * If you wrong the syntax, mulval gives you hints about the error in `xsb_log.txt` file.
 * The variable names in input must be written in undercase syntax, otherwise the program will generate `_` characters   
-* The number parameter is not known
+* The number parameter is not known .
+*  DO NOT USE DOUBLE POINT IN rule_descr: it will break everything.
