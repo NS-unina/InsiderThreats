@@ -174,7 +174,7 @@ interaction_rule(
 /* TID_06 */
 interaction_rule(
     (sensitiveInformationThroughEmail(Data, MailContent) :- isSendingMail(Victim, MailContent), hasMailAccount(Victim), humanError(Victim)),
-    rule_desc('TID_06 - An internal employee uses privileged access to steal sensitive data', 4)).
+    rule_desc('TID_06 - Sensitive information errounesly disclosed by mail', 4)).
     
 
 /* TID_23 */

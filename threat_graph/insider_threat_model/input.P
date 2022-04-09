@@ -44,6 +44,7 @@ noWeb('SigRED').
 
 /*hasMailAccount(admin).*/
 
+/* TODO : INTERNAL ATTACKER AND FILE SERVER */
 
 attackGoal(dataExfiltration(data, _)).
 attackGoal(ransomwareAttack(_)).
