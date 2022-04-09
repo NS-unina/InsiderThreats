@@ -5,6 +5,8 @@ primitive(unawareness(_victim)).
 
 /* The employee has a mail account */
 primitive(hasMailAccount(_victim)).
+/* The employee is sending an email */
+primitive(isSendingMail(_victim, _content)).
 
 /* The employee uses social media at work */
 primitive(useSocial(_victim)).
@@ -62,7 +64,7 @@ derived(dataExfiltration(_data, _host)).
 derived(unsecureDataStorage(_host)).
 derived(skimmingDevice(_attacker, _host)).
 derived(employeeStealsData(_data, _host)).
-derived(sensitiveInformationThroughEmail(_data)).
+derived(sensitiveInformationThroughEmail(_data, _content)).
 derived(getDataFromStolenAsset(_data, _asset)).
 derived(ransomwareAttack(_host)).
 derived(disclosureThroughSocial(_data)).
@@ -148,6 +150,10 @@ interaction_rule(
     (dataExfiltration(DataDisclosure, Host) :- employeeStealsData(DataDisclosure, Host)),
     rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
 
+interaction_rule(
+    (dataExfiltration(DataDisclosure, MailContent) :- sensitiveInformationThroughEmail(DataDisclosure, MailContent)),
+    rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
+
 
 
 /******************************************************/
@@ -167,8 +173,8 @@ interaction_rule(
 
 /* TID_06 */
 interaction_rule(
-    (sensitiveInformationThroughEmail(Data) :- hasMailAccount(Victim), humanError(Victim)),
-    rule_desc('TID_04 - An internal employee uses privileged access to steal sensitive data', 4)).
+    (sensitiveInformationThroughEmail(Data, MailContent) :- isSendingMail(Victim, MailContent), hasMailAccount(Victim), humanError(Victim)),
+    rule_desc('TID_06 - An internal employee uses privileged access to steal sensitive data', 4)).
     
 
 /* TID_23 */

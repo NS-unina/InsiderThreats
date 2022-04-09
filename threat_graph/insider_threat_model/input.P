@@ -24,7 +24,7 @@ isDataStorage(file_server).
 
 hasAccess(charlie, file_server, read).
 hasAccess(daniel, file_server, exec).
-hasMailAccount(administrator).
+isSendingMail(administrator, administrator_mail).
 /* Administrator permissions */
 isAdminOf(administrator, _).
 /*hasAccess(administrator, _, exec).*/
@@ -45,17 +45,6 @@ noWeb('SigRED').
 /*hasMailAccount(admin).*/
 
 
-attackGoal(dataExfiltration(data, file_server)).
-attackGoal(dataExfiltration(data, daniel_workstation)).
-attackGoal(dataExfiltration(data, company_website)).
-attackGoal(dataExfiltration(data, dns_server)).
-attackGoal(dataExfiltration(data, elastic_search)).
-attackGoal(dataExfiltration(data, apache_axis)).
-
-attackGoal(ransomwareAttack(dns_server)).
-attackGoal(ransomwareAttack(file_server)).
-attackGoal(ransomwareAttack(company_website)).
-attackGoal(ransomwareAttack(file_server)).
-attackGoal(ransomwareAttack(elastic_search)).
-attackGoal(ransomwareAttack(apache_axis)).
+attackGoal(dataExfiltration(data, _)).
+attackGoal(ransomwareAttack(_)).
 
