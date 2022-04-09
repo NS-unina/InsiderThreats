@@ -10,10 +10,18 @@ primitive(hasMailAccount(_victim)).
 primitive(useSocial(_victim)).
 
 /* consequences could be data disclosure or remote code execution */
-primitive(vulExists(_host, _vulID, _consequence)).
+primitive(vulExists(_host, _vulID, _privilege)).
+primitive(vulAllowsCodeExecution(_vulID)).
+primitive(vulDisclosesData(_vulID)).
+/* The host is public */
+primitive(isPublic(_host)).
 
 /* The host is a webserver */
-primitive(isWebServer(_host)).
+primitive(isWeb(_vuln)).
+primitive(noWeb(_vuln)).
+
+/* Is a data storage */
+primitive(isDataStorage(_host)).
 
 /* The user administrates the host */
 primitive(isAdminOf(_user, _host)).
@@ -45,22 +53,29 @@ primitive(hasCredentialBreached(victim)).
 primitive(reusePassword(victim, Host)).
 
 derived(spearPhishing(_host, _consequence)).
-derived(webVulnerability(_host, _consequence)).
+derived(webExecVulnerability(_host, _consequence)).
+derived(webDisclosureVulnerability(_host, _consequence)).
+derived(execVulnerability(_host, _vuln)).
+derived(discloseVulnerability(_host, _vuln)).
 derived(discoverWeakPassword(_host, _consequence)).
 derived(dataExfiltration(_data, _host)).
 derived(unsecureDataStorage(_host)).
 derived(skimmingDevice(_attacker, _host)).
 derived(employeeStealsData(_data, _host)).
 derived(sensitiveInformationThroughEmail(_data)).
-derived(getDataFromStolenAsset(_data)).
+derived(getDataFromStolenAsset(_data, _asset)).
+derived(ransomwareAttack(_host)).
 derived(disclosureThroughSocial(_data)).
 meta(attackGoal(_)).
 
 /* Tabling predicates */
 :- table ransomwareAttack/3.
-:- table webVulnerability/11.
+:- table webDisclosureVulnerability/11.
+:- table webExecVulnerability/11.
 :- table spearPhishing/8.
 :- table dataExfiltration/17.
+:- table execVulnerability/5.
+:- table discloseVulnerability/5.
 :- table unsecureDataStorage/1.
 :- table skimmingDevice/3.
 :- table employeeStealsData/4.
@@ -75,18 +90,19 @@ meta(attackGoal(_)).
 /****         Exploitation threats                        *****/
 /******************************************************/
 
+/****         Ransowmare                                    *****/
 /* TID_02 */
 interaction_rule(
-    (ransomwareAttack(Host) :- serviceVulnerability(Host, CodeExecution)), 
+    (ransomwareAttack(Host) :- execVulnerability(Host, Vuln)), 
     rule_desc('Ransomware attack against a target', 3)).
 interaction_rule(
-    (ransomwareAttack(Host) :- spearPhishing(Host, CodeExecution)), 
+    (ransomwareAttack(Host) :- webExecVulnerability(Host, Vuln)), 
     rule_desc('Ransomware attack against a target', 3)).
 interaction_rule(
-    (ransomwareAttack(Host) :- webVulnerability(Host, CodeExecution)), 
+    (ransomwareAttack(Host) :- spearPhishing(Host, exec)), 
     rule_desc('Ransomware attack against a target', 3)).
 interaction_rule(
-    (ransomwareAttack(Host) :- discoverWeakPassword(Host, CodeExecution)), 
+    (ransomwareAttack(Host) :- discoverWeakPassword(Host, exec)), 
     rule_desc('Ransomware attack against a target', 3)).
 
 interaction_rule(
@@ -95,33 +111,40 @@ interaction_rule(
 
 
 
+/****         Information disclosure                                    *****/
 /* TID_17 */
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- webVulnerability(Host, DataDisclosure)),
+    (dataExfiltration(DataDisclosure, Host) :- webDisclosureVulnerability(Host, Vuln)),
     rule_desc('Data exfiltration from a company asset', 17)).
 
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- serviceVulnerability(Host, DataDisclosure)),
+    (dataExfiltration(DataDisclosure, Host) :- discloseVulnerability(Host, Vuln)),
     rule_desc('Data exfiltration from a company asset', 17)).
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- spearPhishing(DataDisclosure, Host)),
+    (dataExfiltration(DataDisclosure, Host) :- spearPhishing(Host, read)),
     rule_desc('Data exfiltration from a company asset', 17)).
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- unsecureDataStorage(Host)),
+    (dataExfiltration(DataDisclosure, Host) :- unsecureDataStorage(Host), isDataStorage(Host)),
     rule_desc('Data exfiltration from a company asset', 17)).
 interaction_rule(
-    (dataExfiltration(DataDisclosure, Host) :- discoverWeakPassword(Host, DataDisclosure)),
+    (dataExfiltration(Data, Host) :- discoverWeakPassword(Host, read)),
     rule_desc('Data exfiltration from a company asset', 17)).
 
 interaction_rule(
     (dataExfiltration(DataDisclosure, Host) :- credentialStuffing(Host, DataDisclosure)),
     rule_desc('Data exfiltration from a company asset', 17)).
 
+interaction_rule(
+    (dataExfiltration(DataDisclosure, Asset) :- skimmingDevice(Attacker, Asset)),
+    rule_desc('Data exfiltration from a company asset', 17)).
 
 interaction_rule(
     (dataExfiltration(DataDisclosure, Asset) :- getDataFromStolenAsset(Data, Asset)),
     rule_desc('Data exfiltration from a company asset', 17)).
 
+interaction_rule(
+    (dataExfiltration(DataDisclosure, Host) :- employeeStealsData(DataDisclosure, Host)),
+    rule_desc('Data exfiltration from a company asset', 17)).
 
 
 
@@ -132,6 +155,10 @@ interaction_rule(
 /* TID_04 */
 interaction_rule(
     (employeeStealsData(Data, Host) :- insiderness(Employee), hasAccess(Employee, Host, read)),
+    rule_desc('An internal employee uses privileged access to steal sensitive data', 4)).
+
+interaction_rule(
+    (employeeStealsData(Data, Host) :- insiderness(Employee), hasAccess(Employee, Host, exec)),
     rule_desc('An internal employee uses privileged access to steal sensitive data', 4)).
 
 /* TID_06 */
@@ -150,53 +177,54 @@ interaction_rule(
 
 /* TID_01 */
 interaction_rule(
-    (unsecureDataStorage(Host) :- isAdminOf(User, Host), humanError(User)),
+    (unsecureDataStorage(Host) :- isAdminOf(User, Host), humanError(User), isPublic(Host)),
     rule_desc('Unsecure data storage', 1)).
-
 
 
 /* TID_03 */
 interaction_rule(
     (skimmingDevice(Attacker, Host) :- hasPhysicalAccess(Attacker, Host)),
-    rule_desc('Unsecure data storage', 1)).
+    rule_desc('The attacker install a skimming device to exfiltrate data', 1)).
+
 
 /* TID_05 */
 interaction_rule(
-    (serviceVulnerability(Host, DataDisclosure) :- vulExists(Host, _, DataDisclosure)),
-    rule_desc('A service vulnerability discloses sensitive information', 5)).
-interaction_rule(
-    (serviceVulnerability(Host, CodeExecution) :- vulExists(Host, _, CodeExecution)),
+    (execVulnerability(Host, Vuln) :- vulExists(Host, Vuln, code_exec), noWeb(Vuln)),
     rule_desc('A service vulnerability allows code execution', 5)).
+interaction_rule(
+    (discloseVulnerability(Host, Vuln) :- vulExists(Host, Vuln, information_disclosure), noWeb(Vuln)),
+    rule_desc('A service vulnerability discloses sensitive information', 5)).
 
 
 /* TID_08 */
 interaction_rule(
-    (spearPhishing(Host, DataDisclosure) :- hasMailAccount(Victim), unawareness(Victim), hasAccess(Victim, Host, read)),
+    (spearPhishing(Host, read) :- hasMailAccount(Victim), unawareness(Victim), hasAccess(Victim, Host, read)),
     rule_desc('An employee falls victim to a spear phising attack', 8)).
 interaction_rule(
-    (spearPhishing(Host, CodeExecution) :- hasMailAccount(Victim), unawareness(Victim), hasAccess(Victim, Host, exec)),
+    (spearPhishing(Host, exec) :- hasMailAccount(Victim), unawareness(Victim), hasAccess(Victim, Host, exec)),
     rule_desc('An employee falls victim to a spear phising attack', 8)).
 
 /* TID_10 */
 interaction_rule(
-    (getDataFromStolenAsset(Data, Asset) :- dataInAsset(Asset, Data), hasPhysicalAccess(Attacker, Asset)),
+    (getDataFromStolenAsset(Data, Asset) :- hasPhysicalAccess(Attacker, Asset)),
     rule_desc('An employee falls victim to a spear phising attack', 10)).
     
 /* TID_11 */
 interaction_rule(
-    (webVulnerability(Host, DataDisclosure) :- vulExists(Host, _, DataDisclosure), isWebServer(Host)),
-    rule_desc('A web vulnerability discloses data from webserver', 11)).
+    (webDisclosureVulnerability(Host, Vuln) :- vulExists(Host, Vuln, information_disclosure), isWeb(Vuln)),
+    rule_desc('A web vulnerability affects the webserver', 11)).
+
 interaction_rule(
-    (webVulnerability(Host, CodeExecution) :- vulExists(Host, _, CodeExecution), isWebServer(Host)),
-    rule_desc('A web vulnerability allows code execution', 11)).
+    (webExecVulnerability(Host, Vuln) :- vulExists(Host, Vuln, code_exec), isWeb(Vuln)),
+    rule_desc('A web vulnerability affects the webserver', 11)).
 
 /* TID_13 */
 interaction_rule(
-    (discoverWeakPassword(Host, DataDisclosure) :- unawareness(Victim), hasAccess(Victim, Host, read)),
+    (discoverWeakPassword(Host, read) :- unawareness(Victim), hasAccess(Victim, Host, read)),
     rule_desc('An attacker discovers a weak password', 13)).
 /* TID_13 */
 interaction_rule(
-    (discoverWeakPassword(Host, CodeExecution) :- unawareness(Victim), hasAccess(Victim, Host, exec)),
+    (discoverWeakPassword(Host, exec) :- unawareness(Victim), hasAccess(Victim, Host, exec)),
     rule_desc('An attacker discovers a weak password and has execution access to the server', 13)).
 
 /* TID_15 */

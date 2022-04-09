@@ -24,9 +24,11 @@ isDataStorage(file_server).
 hasAccess(charlie, file_server, read).
 hasAccess(daniel, file_server, exec).
 hasMailAccount(administrator).
-/* Administrator permissions */
-isAdminOf(administrator, _).
-/*hasAccess(administrator, _, exec).*/
+isAdminOf(administrator, company_website).
+isAdminOf(administrator, elastic_search).
+isAdminOf(administrator, apache_axis).
+isAdminOf(administrator, file_server).
+isAdminOf(administrator, dns_server).
 
 hasPhysicalAccess(internal_attacker, daniel_workstation).
 dataInAsset(daniel_workstation, data).
@@ -42,6 +44,8 @@ vulExists(dns_server, 'SigRED', code_exec).
 noWeb('SigRED').
 
 /*hasMailAccount(admin).*/
+hasAccess(admin, file_server, read).
+hasAccess(admin, company_website, read).
 
 
 attackGoal(dataExfiltration(data, file_server)).
