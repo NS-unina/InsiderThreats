@@ -1,9 +1,9 @@
 import csv
 import pyAgrum as gum
-import pyAgrum.lib.notebook as gnb
 
 vertices = []
 arcs = []
+thidProb = {}
 arcsDict = {}
 invArcsDict = {}
 
@@ -25,6 +25,11 @@ with open('inputData/ARCS.CSV') as csv_file:
       invArcsDict[row[0]].append(row[1])
     arcsDict[row[1]] = row[-1]
 
+with open('probData/thid.csv') as csv_file:
+  csv_reader = csv.reader(csv_file, delimiter=',')
+  for row in csv_reader:
+    thidProb[row[0]] = float(row[-1])
+
 bn=gum.BayesNet('BayesianAttackGraph')
 
 for row in vertices:
@@ -32,4 +37,7 @@ for row in vertices:
 for row in arcs:
   bn.addArc(row[1],row[0])
 
-bn
+
+
+#print(thidProb)
+#print(vertices)
