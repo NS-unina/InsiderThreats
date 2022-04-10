@@ -1,6 +1,6 @@
 /*  Users */
 unawareness(charlie).
-unawareness(administrator).
+/*unawareness(administrator).*/
 /*unawareness(daniel).*/
 /* Unawareness */
 /*humanError(charlie).
