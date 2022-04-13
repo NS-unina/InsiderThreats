@@ -1,0 +1,64 @@
+/*  Users */
+unawareness(charlie).
+/*unawareness(administrator).*/
+/*unawareness(daniel).*/
+/* Unawareness */
+/*humanError(charlie).
+humanError(daniel).
+*/
+/* Global threat probability */
+tid01(_).
+tid02(_).
+tid03(_).
+tid04(_).
+tid05(_).
+tid06(_).
+tid08(_).
+tid10(_).
+tid11(_).
+tid13(_).
+tid15(_).
+tid17(_).
+tid23(_).
+
+humanError(administrator).
+
+insiderness(daniel).
+/*insiderness(administrator).*/
+
+
+
+hasMailAccount(charlie).
+hasMailAccount(daniel).
+hasMailAccount(administrator).
+
+isDataStorage(elastic_search).
+isPublic(elastic_search).
+isDataStorage(file_server).
+
+hasAccess(charlie, file_server, read).
+hasAccess(daniel, file_server, exec).
+isSendingMail(administrator, administrator_mail).
+/* Administrator permissions */
+isAdminOf(administrator, _).
+/*hasAccess(administrator, _, exec).*/
+
+hasPhysicalAccess(internal_attacker, daniel_workstation).
+dataInAsset(daniel_workstation, data).
+
+
+/* Server properties */
+isWeb('SQLi').
+/* Vulnerabilities */
+vulExists(company_website, 'SQLi', information_disclosure).
+/*vulDisclosesData('SQLi').*/
+vulExists(dns_server, 'SigRED', code_exec).
+/*vulAllowsCodeExecution('SigRED').*/
+noWeb('SigRED').
+
+/*hasMailAccount(admin).*/
+
+/* TODO : INTERNAL ATTACKER AND FILE SERVER */
+
+attackGoal(dataExfiltration(data, _)).
+
