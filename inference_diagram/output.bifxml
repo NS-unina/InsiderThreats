@@ -109,8 +109,8 @@
 	<FOR>1-dataExfiltration(data,company_website)</FOR>
 	<GIVEN>2-RULE 0 (TID_17 - Data exfiltration from a company asset)</GIVEN>
 	<TABLE>
-		0 0
-		0 0
+		1 0
+		0.948962 0.0510381
 	</TABLE>
 </DEFINITION>
 <DEFINITION>
@@ -118,10 +118,10 @@
 	<GIVEN>3-tid17(_)</GIVEN>
 	<GIVEN>4-webDisclosureVulnerability(company_website,'SQLi')</GIVEN>
 	<TABLE>
-		0 0
-		0 0
-		0 0
-		0 0
+		1 0
+		1 0
+		1 0
+		0.948962 0.0510381
 	</TABLE>
 </DEFINITION>
 <DEFINITION>
@@ -134,8 +134,8 @@
 	<FOR>4-webDisclosureVulnerability(company_website,'SQLi')</FOR>
 	<GIVEN>5-RULE 3 (TID_11 - A web vulnerability affects the webserver)</GIVEN>
 	<TABLE>
-		0 0
-		0 0
+		1 0
+		0.764706 0.235294
 	</TABLE>
 </DEFINITION>
 <DEFINITION>
@@ -144,14 +144,14 @@
 	<GIVEN>7-isWeb('SQLi')</GIVEN>
 	<GIVEN>8-vulExists(company_website,'SQLi',information_disclosure)</GIVEN>
 	<TABLE>
-		0 0
-		0 0
-		0 0
-		0 0
-		0 0
-		0 0
-		0 0
-		0 0
+		1 0
+		1 0
+		1 0
+		1 0
+		1 0
+		1 0
+		1 0
+		0.764706 0.235294
 	</TABLE>
 </DEFINITION>
 <DEFINITION>
@@ -176,8 +176,8 @@
 	<FOR>9-dataExfiltration(data,daniel_workstation)</FOR>
 	<GIVEN>10-RULE 1 (TID_17 - Data exfiltration from a company asset)</GIVEN>
 	<TABLE>
-		0 0
-		0 0
+		1 0
+		0.997608 0.00239232
 	</TABLE>
 </DEFINITION>
 <DEFINITION>
@@ -185,18 +185,18 @@
 	<GIVEN>3-tid17(_)</GIVEN>
 	<GIVEN>11-skimmingDevice(internal_attacker,daniel_workstation)</GIVEN>
 	<TABLE>
-		0 0
-		0 0
-		0 0
-		0 0
+		1 0
+		1 0
+		1 0
+		0.997608 0.00239232
 	</TABLE>
 </DEFINITION>
 <DEFINITION>
 	<FOR>11-skimmingDevice(internal_attacker,daniel_workstation)</FOR>
 	<GIVEN>12-RULE 2 (TID_03 - The attacker installs a skimming device to exfiltrate data)</GIVEN>
 	<TABLE>
-		0 0
-		0 0
+		1 0
+		0.988971 0.011029
 	</TABLE>
 </DEFINITION>
 <DEFINITION>
@@ -204,10 +204,10 @@
 	<GIVEN>13-tid03(_)</GIVEN>
 	<GIVEN>14-hasPhysicalAccess(internal_attacker,daniel_workstation)</GIVEN>
 	<TABLE>
-		0 0
-		0 0
-		0 0
-		0 0
+		1 0
+		1 0
+		1 0
+		0.988971 0.011029
 	</TABLE>
 </DEFINITION>
 <DEFINITION>
