@@ -11,13 +11,17 @@ class SecThreatBenefit:
         self.threat = threat
         self.sc = sc
         self.threat_benefit = threat_benefit
+        print("sc cost: {}".format(self.sc.cost))
+        print("threat benefit: {}".format(threat_benefit))
+        print("threat cost: {}".format(threat.impact))
 
     def sc_implemented_no_threat(self):
         # The sc is implemented but no threat
-        return -self.sc.cost - self.threat.impact
+
+        return -self.sc.cost 
 
     def sc_implemented_threat(self):
-        # The sc is implemented and threat
+        # The sc is implemented and threat occurs
         return self.threat_benefit  - self.sc.cost - self.threat.impact
 
     def sc_no_implemented_threat(self):
@@ -27,7 +31,10 @@ class SecThreatBenefit:
         # The sc is not implemented and threat
         return 0
     def get_name(self):
-        return self.sc.name + " against " + self.threat.tid
+        return self.sc.name + "-against-" + self.threat.tid
+
+    def get_full_name(self):
+        return "Utility: "+ self.sc.name + "against" + self.threat.tid
 
 
 class SecurityControl:
