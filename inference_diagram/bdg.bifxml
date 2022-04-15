@@ -1,0 +1,1002 @@
+<?xml version="1.0" ?>
+
+<BIF VERSION="0.3">
+<NETWORK>
+<NAME>BayesianThreatGraph</NAME>
+<PROPERTY>software aGrUM</PROPERTY>
+
+<!-- Variables -->
+<VARIABLE TYPE="nature">
+	<NAME>1-dataExfiltration(data,administrator_mail)</NAME>
+	<PROPERTY>dataExfiltration(data,administrator_mail)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>2-RULE 14 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 14 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>3-tid17(_)</NAME>
+	<PROPERTY>tid17(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>4-sensitiveInformationThroughEmail(data,administrator_mail)</NAME>
+	<PROPERTY>sensitiveInformationThroughEmail(data,administrator_mail)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>5-RULE 17 (TID_06 - Sensitive information errounesly disclosed by mail)</NAME>
+	<PROPERTY>RULE 17 (TID_06 - Sensitive information errounesly disclosed by mail)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>6-tid06(_)</NAME>
+	<PROPERTY>tid06(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>7-humanError(administrator)</NAME>
+	<PROPERTY>humanError(administrator)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>8-hasMailAccount(administrator)</NAME>
+	<PROPERTY>hasMailAccount(administrator)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>9-isSendingMail(administrator,administrator_mail)</NAME>
+	<PROPERTY>isSendingMail(administrator,administrator_mail)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>10-dataExfiltration(data,company_website)</NAME>
+	<PROPERTY>dataExfiltration(data,company_website)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>11-RULE 5 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 5 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>12-webDisclosureVulnerability(company_website,'SQLi')</NAME>
+	<PROPERTY>webDisclosureVulnerability(company_website,'SQLi')</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>13-RULE 26 (TID_11 - A web vulnerability affects the webserver)</NAME>
+	<PROPERTY>RULE 26 (TID_11 - A web vulnerability affects the webserver)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>14-tid11(_)</NAME>
+	<PROPERTY>tid11(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>15-isWeb('SQLi')</NAME>
+	<PROPERTY>isWeb('SQLi')</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>16-vulExists(company_website,'SQLi',information_disclosure)</NAME>
+	<PROPERTY>vulExists(company_website,'SQLi',information_disclosure)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>17-dataExfiltration(data,daniel_workstation)</NAME>
+	<PROPERTY>dataExfiltration(data,daniel_workstation)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>18-RULE 11 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 11 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>19-skimmingDevice(internal_attacker,daniel_workstation)</NAME>
+	<PROPERTY>skimmingDevice(internal_attacker,daniel_workstation)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>20-RULE 20 (TID_03 - The attacker installs a skimming device to exfiltrate data)</NAME>
+	<PROPERTY>RULE 20 (TID_03 - The attacker installs a skimming device to exfiltrate data)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>21-tid03(_)</NAME>
+	<PROPERTY>tid03(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>22-hasPhysicalAccess(internal_attacker,daniel_workstation)</NAME>
+	<PROPERTY>hasPhysicalAccess(internal_attacker,daniel_workstation)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>23-RULE 12 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 12 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>24-getDataFromStolenAsset(_,daniel_workstation)</NAME>
+	<PROPERTY>getDataFromStolenAsset(_,daniel_workstation)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>25-RULE 25 (TID_10 - An attacker steals asset)</NAME>
+	<PROPERTY>RULE 25 (TID_10 - An attacker steals asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>26-tid10(_)</NAME>
+	<PROPERTY>tid10(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>27-dataExfiltration(data,elastic_search)</NAME>
+	<PROPERTY>dataExfiltration(data,elastic_search)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>28-RULE 8 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 8 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>29-unsecureDataStorage(elastic_search)</NAME>
+	<PROPERTY>unsecureDataStorage(elastic_search)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>30-RULE 19 (TID_01 - Unsecure data storage)</NAME>
+	<PROPERTY>RULE 19 (TID_01 - Unsecure data storage)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>31-tid01(_)</NAME>
+	<PROPERTY>tid01(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>32-isPublic(elastic_search)</NAME>
+	<PROPERTY>isPublic(elastic_search)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>33-isAdminOf(administrator,elastic_search)</NAME>
+	<PROPERTY>isAdminOf(administrator,elastic_search)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>34-isDataStorage(elastic_search)</NAME>
+	<PROPERTY>isDataStorage(elastic_search)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>35-dataExfiltration(data,file_server)</NAME>
+	<PROPERTY>dataExfiltration(data,file_server)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>36-RULE 13 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 13 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>37-employeeStealsData(data,file_server)</NAME>
+	<PROPERTY>employeeStealsData(data,file_server)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>38-RULE 16 (TID_04 - An internal employee uses privileged access to steal sensitive data)</NAME>
+	<PROPERTY>RULE 16 (TID_04 - An internal employee uses privileged access to steal sensitive data)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>39-tid04(_)</NAME>
+	<PROPERTY>tid04(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>40-hasAccess(daniel,file_server,exec)</NAME>
+	<PROPERTY>hasAccess(daniel,file_server,exec)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>41-insiderness(daniel)</NAME>
+	<PROPERTY>insiderness(daniel)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>42-RULE 7 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 7 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>43-spearPhishing(file_server,read)</NAME>
+	<PROPERTY>spearPhishing(file_server,read)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>44-RULE 23 (TID_08 - An employee falls victim to a spear phising attack)</NAME>
+	<PROPERTY>RULE 23 (TID_08 - An employee falls victim to a spear phising attack)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>45-tid08(_)</NAME>
+	<PROPERTY>tid08(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>46-hasAccess(charlie,file_server,read)</NAME>
+	<PROPERTY>hasAccess(charlie,file_server,read)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>47-unawareness(charlie)</NAME>
+	<PROPERTY>unawareness(charlie)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>48-hasMailAccount(charlie)</NAME>
+	<PROPERTY>hasMailAccount(charlie)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>49-RULE 9 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 9 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>50-discoverWeakPassword(file_server,read)</NAME>
+	<PROPERTY>discoverWeakPassword(file_server,read)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>51-RULE 28 (TID_13 - An attacker discovers a weak password)</NAME>
+	<PROPERTY>RULE 28 (TID_13 - An attacker discovers a weak password)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>52-tid13(_)</NAME>
+	<PROPERTY>tid13(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>53-ransomwareAttack(dns_server)</NAME>
+	<PROPERTY>ransomwareAttack(dns_server)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>54-RULE 0 (TID_02 - Ransomware attack against a target)</NAME>
+	<PROPERTY>RULE 0 (TID_02 - Ransomware attack against a target)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>55-tid02(_)</NAME>
+	<PROPERTY>tid02(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>56-execVulnerability(dns_server,'SigRED')</NAME>
+	<PROPERTY>execVulnerability(dns_server,'SigRED')</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>57-RULE 21 (TID_05 - A service vulnerability allows code execution)</NAME>
+	<PROPERTY>RULE 21 (TID_05 - A service vulnerability allows code execution)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>58-tid05(_)</NAME>
+	<PROPERTY>tid05(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>59-noWeb('SigRED')</NAME>
+	<PROPERTY>noWeb('SigRED')</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>60-vulExists(dns_server,'SigRED',code_exec)</NAME>
+	<PROPERTY>vulExists(dns_server,'SigRED',code_exec)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<!-- Probability distributions -->
+<DEFINITION>
+	<FOR>1-dataExfiltration(data,administrator_mail)</FOR>
+	<GIVEN>2-RULE 14 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<TABLE>
+		0 1
+		0.994418 0.00558223
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>2-RULE 14 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>4-sensitiveInformationThroughEmail(data,administrator_mail)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.994418 0.00558223
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>3-tid17(_)</FOR>
+	<TABLE>
+		0.783088 0.216912
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>4-sensitiveInformationThroughEmail(data,administrator_mail)</FOR>
+	<GIVEN>5-RULE 17 (TID_06 - Sensitive information errounesly disclosed by mail)</GIVEN>
+	<TABLE>
+		0 1
+		0.974265 0.025735
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>5-RULE 17 (TID_06 - Sensitive information errounesly disclosed by mail)</FOR>
+	<GIVEN>6-tid06(_)</GIVEN>
+	<GIVEN>7-humanError(administrator)</GIVEN>
+	<GIVEN>8-hasMailAccount(administrator)</GIVEN>
+	<GIVEN>9-isSendingMail(administrator,administrator_mail)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0.974265 0.025735
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>6-tid06(_)</FOR>
+	<TABLE>
+		0.974265 0.025735
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>7-humanError(administrator)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>8-hasMailAccount(administrator)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>9-isSendingMail(administrator,administrator_mail)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>10-dataExfiltration(data,company_website)</FOR>
+	<GIVEN>11-RULE 5 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<TABLE>
+		0 1
+		0.948962 0.0510381
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>11-RULE 5 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>12-webDisclosureVulnerability(company_website,'SQLi')</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.948962 0.0510381
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>12-webDisclosureVulnerability(company_website,'SQLi')</FOR>
+	<GIVEN>13-RULE 26 (TID_11 - A web vulnerability affects the webserver)</GIVEN>
+	<TABLE>
+		0 1
+		0.764706 0.235294
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>13-RULE 26 (TID_11 - A web vulnerability affects the webserver)</FOR>
+	<GIVEN>14-tid11(_)</GIVEN>
+	<GIVEN>15-isWeb('SQLi')</GIVEN>
+	<GIVEN>16-vulExists(company_website,'SQLi',information_disclosure)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0.764706 0.235294
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>14-tid11(_)</FOR>
+	<TABLE>
+		0.764706 0.235294
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>15-isWeb('SQLi')</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>16-vulExists(company_website,'SQLi',information_disclosure)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>17-dataExfiltration(data,daniel_workstation)</FOR>
+	<GIVEN>18-RULE 11 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<GIVEN>23-RULE 12 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<TABLE>
+		0 1
+		0.987265 0.0127346
+		0.987265 0.0127346
+		0.987265 0.0127346
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>18-RULE 11 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>19-skimmingDevice(internal_attacker,daniel_workstation)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.997608 0.00239232
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>19-skimmingDevice(internal_attacker,daniel_workstation)</FOR>
+	<GIVEN>20-RULE 20 (TID_03 - The attacker installs a skimming device to exfiltrate data)</GIVEN>
+	<TABLE>
+		0 1
+		0.988971 0.011029
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>20-RULE 20 (TID_03 - The attacker installs a skimming device to exfiltrate data)</FOR>
+	<GIVEN>21-tid03(_)</GIVEN>
+	<GIVEN>22-hasPhysicalAccess(internal_attacker,daniel_workstation)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.988971 0.011029
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>21-tid03(_)</FOR>
+	<TABLE>
+		0.988971 0.011029
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>22-hasPhysicalAccess(internal_attacker,daniel_workstation)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>23-RULE 12 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>24-getDataFromStolenAsset(_,daniel_workstation)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.989633 0.0103671
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>24-getDataFromStolenAsset(_,daniel_workstation)</FOR>
+	<GIVEN>25-RULE 25 (TID_10 - An attacker steals asset)</GIVEN>
+	<TABLE>
+		0 1
+		0.952206 0.047794
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>25-RULE 25 (TID_10 - An attacker steals asset)</FOR>
+	<GIVEN>26-tid10(_)</GIVEN>
+	<GIVEN>22-hasPhysicalAccess(internal_attacker,daniel_workstation)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.952206 0.047794
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>26-tid10(_)</FOR>
+	<TABLE>
+		0.952206 0.047794
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>27-dataExfiltration(data,elastic_search)</FOR>
+	<GIVEN>28-RULE 8 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<TABLE>
+		0 1
+		0.946569 0.0534306
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>28-RULE 8 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>29-unsecureDataStorage(elastic_search)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.946569 0.0534306
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>29-unsecureDataStorage(elastic_search)</FOR>
+	<GIVEN>30-RULE 19 (TID_01 - Unsecure data storage)</GIVEN>
+	<TABLE>
+		0 1
+		0.753676 0.246324
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>30-RULE 19 (TID_01 - Unsecure data storage)</FOR>
+	<GIVEN>31-tid01(_)</GIVEN>
+	<GIVEN>32-isPublic(elastic_search)</GIVEN>
+	<GIVEN>7-humanError(administrator)</GIVEN>
+	<GIVEN>33-isAdminOf(administrator,elastic_search)</GIVEN>
+	<GIVEN>34-isDataStorage(elastic_search)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0.753676 0.246324
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>31-tid01(_)</FOR>
+	<TABLE>
+		0.753676 0.246324
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>32-isPublic(elastic_search)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>33-isAdminOf(administrator,elastic_search)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>34-isDataStorage(elastic_search)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>35-dataExfiltration(data,file_server)</FOR>
+	<GIVEN>36-RULE 13 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<GIVEN>42-RULE 7 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<GIVEN>49-RULE 9 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<TABLE>
+		0 1
+		0.975436 0.024564
+		0.975436 0.024564
+		0.975436 0.024564
+		0.975436 0.024564
+		0.975436 0.024564
+		0.975436 0.024564
+		0.975436 0.024564
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>36-RULE 13 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>37-employeeStealsData(data,file_server)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.984051 0.0159493
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>37-employeeStealsData(data,file_server)</FOR>
+	<GIVEN>38-RULE 16 (TID_04 - An internal employee uses privileged access to steal sensitive data)</GIVEN>
+	<TABLE>
+		0 1
+		0.926471 0.073529
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>38-RULE 16 (TID_04 - An internal employee uses privileged access to steal sensitive data)</FOR>
+	<GIVEN>39-tid04(_)</GIVEN>
+	<GIVEN>40-hasAccess(daniel,file_server,exec)</GIVEN>
+	<GIVEN>41-insiderness(daniel)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0.926471 0.073529
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>39-tid04(_)</FOR>
+	<TABLE>
+		0.926471 0.073529
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>40-hasAccess(daniel,file_server,exec)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>41-insiderness(daniel)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>42-RULE 7 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>43-spearPhishing(file_server,read)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.994418 0.00558223
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>43-spearPhishing(file_server,read)</FOR>
+	<GIVEN>44-RULE 23 (TID_08 - An employee falls victim to a spear phising attack)</GIVEN>
+	<TABLE>
+		0 1
+		0.974265 0.025735
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>44-RULE 23 (TID_08 - An employee falls victim to a spear phising attack)</FOR>
+	<GIVEN>45-tid08(_)</GIVEN>
+	<GIVEN>46-hasAccess(charlie,file_server,read)</GIVEN>
+	<GIVEN>47-unawareness(charlie)</GIVEN>
+	<GIVEN>48-hasMailAccount(charlie)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0.974265 0.025735
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>45-tid08(_)</FOR>
+	<TABLE>
+		0.974265 0.025735
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>46-hasAccess(charlie,file_server,read)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>47-unawareness(charlie)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>48-hasMailAccount(charlie)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>49-RULE 9 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>50-discoverWeakPassword(file_server,read)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.99681 0.00318991
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>50-discoverWeakPassword(file_server,read)</FOR>
+	<GIVEN>51-RULE 28 (TID_13 - An attacker discovers a weak password)</GIVEN>
+	<TABLE>
+		0 1
+		0.985294 0.014706
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>51-RULE 28 (TID_13 - An attacker discovers a weak password)</FOR>
+	<GIVEN>52-tid13(_)</GIVEN>
+	<GIVEN>46-hasAccess(charlie,file_server,read)</GIVEN>
+	<GIVEN>47-unawareness(charlie)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0.985294 0.014706
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>52-tid13(_)</FOR>
+	<TABLE>
+		0.985294 0.014706
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>53-ransomwareAttack(dns_server)</FOR>
+	<GIVEN>54-RULE 0 (TID_02 - Ransomware attack against a target)</GIVEN>
+	<TABLE>
+		0 1
+		0.945299 0.054701
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>54-RULE 0 (TID_02 - Ransomware attack against a target)</FOR>
+	<GIVEN>55-tid02(_)</GIVEN>
+	<GIVEN>56-execVulnerability(dns_server,'SigRED')</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.945299 0.054701
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>55-tid02(_)</FOR>
+	<TABLE>
+		0.216912 0.783088
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>56-execVulnerability(dns_server,'SigRED')</FOR>
+	<GIVEN>57-RULE 21 (TID_05 - A service vulnerability allows code execution)</GIVEN>
+	<TABLE>
+		0 1
+		0.930147 0.069853
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>57-RULE 21 (TID_05 - A service vulnerability allows code execution)</FOR>
+	<GIVEN>58-tid05(_)</GIVEN>
+	<GIVEN>59-noWeb('SigRED')</GIVEN>
+	<GIVEN>60-vulExists(dns_server,'SigRED',code_exec)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0.930147 0.069853
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>58-tid05(_)</FOR>
+	<TABLE>
+		0.930147 0.069853
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>59-noWeb('SigRED')</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>60-vulExists(dns_server,'SigRED',code_exec)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+
+</NETWORK>
+</BIF>

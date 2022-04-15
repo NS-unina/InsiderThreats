@@ -1,0 +1,227 @@
+<?xml version="1.0" ?>
+
+<BIF VERSION="0.3">
+<NETWORK>
+<NAME>BayesianThreatGraph</NAME>
+<PROPERTY>software aGrUM</PROPERTY>
+
+<!-- Variables -->
+<VARIABLE TYPE="nature">
+	<NAME>1-dataExfiltration(data,company_website)</NAME>
+	<PROPERTY>dataExfiltration(data,company_website)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>2-RULE 0 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 0 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>3-tid17(_)</NAME>
+	<PROPERTY>tid17(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>4-webDisclosureVulnerability(company_website,'SQLi')</NAME>
+	<PROPERTY>webDisclosureVulnerability(company_website,'SQLi')</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>5-RULE 3 (TID_11 - A web vulnerability affects the webserver)</NAME>
+	<PROPERTY>RULE 3 (TID_11 - A web vulnerability affects the webserver)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>6-tid11(_)</NAME>
+	<PROPERTY>tid11(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>7-isWeb('SQLi')</NAME>
+	<PROPERTY>isWeb('SQLi')</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>8-vulExists(company_website,'SQLi',information_disclosure)</NAME>
+	<PROPERTY>vulExists(company_website,'SQLi',information_disclosure)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>9-dataExfiltration(data,daniel_workstation)</NAME>
+	<PROPERTY>dataExfiltration(data,daniel_workstation)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>10-RULE 1 (TID_17 - Data exfiltration from a company asset)</NAME>
+	<PROPERTY>RULE 1 (TID_17 - Data exfiltration from a company asset)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>11-skimmingDevice(internal_attacker,daniel_workstation)</NAME>
+	<PROPERTY>skimmingDevice(internal_attacker,daniel_workstation)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>12-RULE 2 (TID_03 - The attacker installs a skimming device to exfiltrate data)</NAME>
+	<PROPERTY>RULE 2 (TID_03 - The attacker installs a skimming device to exfiltrate data)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>13-tid03(_)</NAME>
+	<PROPERTY>tid03(_)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>14-hasPhysicalAccess(internal_attacker,daniel_workstation)</NAME>
+	<PROPERTY>hasPhysicalAccess(internal_attacker,daniel_workstation)</PROPERTY>
+	<OUTCOME>0</OUTCOME>
+	<OUTCOME>1</OUTCOME>
+</VARIABLE>
+
+<!-- Probability distributions -->
+<DEFINITION>
+	<FOR>1-dataExfiltration(data,company_website)</FOR>
+	<GIVEN>2-RULE 0 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<TABLE>
+		0 1
+		0.948962 0.0510381
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>2-RULE 0 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>4-webDisclosureVulnerability(company_website,'SQLi')</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.948962 0.0510381
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>3-tid17(_)</FOR>
+	<TABLE>
+		0.783088 0.216912
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>4-webDisclosureVulnerability(company_website,'SQLi')</FOR>
+	<GIVEN>5-RULE 3 (TID_11 - A web vulnerability affects the webserver)</GIVEN>
+	<TABLE>
+		0 1
+		0.764706 0.235294
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>5-RULE 3 (TID_11 - A web vulnerability affects the webserver)</FOR>
+	<GIVEN>6-tid11(_)</GIVEN>
+	<GIVEN>7-isWeb('SQLi')</GIVEN>
+	<GIVEN>8-vulExists(company_website,'SQLi',information_disclosure)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0 1
+		0.764706 0.235294
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>6-tid11(_)</FOR>
+	<TABLE>
+		0.764706 0.235294
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>7-isWeb('SQLi')</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>8-vulExists(company_website,'SQLi',information_disclosure)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>9-dataExfiltration(data,daniel_workstation)</FOR>
+	<GIVEN>10-RULE 1 (TID_17 - Data exfiltration from a company asset)</GIVEN>
+	<TABLE>
+		0 1
+		0.997608 0.00239232
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>10-RULE 1 (TID_17 - Data exfiltration from a company asset)</FOR>
+	<GIVEN>3-tid17(_)</GIVEN>
+	<GIVEN>11-skimmingDevice(internal_attacker,daniel_workstation)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.997608 0.00239232
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>11-skimmingDevice(internal_attacker,daniel_workstation)</FOR>
+	<GIVEN>12-RULE 2 (TID_03 - The attacker installs a skimming device to exfiltrate data)</GIVEN>
+	<TABLE>
+		0 1
+		0.988971 0.011029
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>12-RULE 2 (TID_03 - The attacker installs a skimming device to exfiltrate data)</FOR>
+	<GIVEN>13-tid03(_)</GIVEN>
+	<GIVEN>14-hasPhysicalAccess(internal_attacker,daniel_workstation)</GIVEN>
+	<TABLE>
+		0 1
+		0 1
+		0 1
+		0.988971 0.011029
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>13-tid03(_)</FOR>
+	<TABLE>
+		0.988971 0.011029
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>14-hasPhysicalAccess(internal_attacker,daniel_workstation)</FOR>
+	<TABLE>
+		0 1
+	</TABLE>
+</DEFINITION>
+
+</NETWORK>
+</BIF>
