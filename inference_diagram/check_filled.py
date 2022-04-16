@@ -12,10 +12,8 @@ gu = btg_generate()
 def cpt(gu, names):
     for var_name in names: 
         if not gu.has_parents(var_name):
-            p("root node skip {}".format(var_name))
-        # print(gu.diag.cpt(var_name))
+            dbg("root node skip {}".format(var_name))
         else:
-            # print("{} has parents".format(var_name))
             parents = gu.get_parents_names(var_name)
             gum_node = gu.get_gum_node(var_name)
             cpt(gu, parents)
@@ -29,16 +27,12 @@ def cpt(gu, names):
 
 
 leaf_nodes = GumNode.get_names(gu.get_goal_nodes())
-# print(leaf_nodes[0])
-print(leaf_nodes[0])
 for l in leaf_nodes:
     cpt(gu, [l])
-# gum.saveBN(gu.diag, "filled_btg.bifxml")
-# print("btg filled saved")
 
 goal_nodes = gu.get_goal_nodes()
 
-p("Make inference")
+dbg("Make inference")
 ie=gum.LazyPropagation(gu.diag)
 ie.makeInference()
 for l in goal_nodes:

@@ -1,0 +1,206 @@
+[
+    {
+        "CIS_04": {
+            "descr": "Secure Configuration of Enterprise Assets and Software",
+            "addressed_threats": [
+                {
+                    "tid": "tid05",
+                    "keyword": "execVulnerability",
+                    "probReduction": "0.3"
+                }
+            ],
+            "cost": 1000
+        }
+    },
+    {
+        "CIS_05": {
+            "descr": "Account Management",
+            "addressed_threats": [
+                {
+                    "tid": "tid07",
+                    "keyword": "discoverWeakPassword",
+                    "probReduction": "0.3"
+                }
+            ],
+            "cost": 1000
+        }
+    },
+    {
+        "CIS_06": {
+            "descr": "Access Control Management",
+            "addressed_threats": [
+                {
+                    "tid": "tid04",
+                    "keyword": "employeeStealsData",
+                    "probReduction": "0.3"
+                }
+            ],
+            "cost": 1000
+        }
+    },
+    {
+        "CIS_07": {
+            "descr": "Continous Vulnerability Management",
+            "addressed_threats": [
+                {
+                    "tid": "tid11",
+                    "keyword": "webDisclosureVulnerability",
+                    "probReduction": "0.3"
+                },
+                {
+                    "tid": "tid05",
+                    "keyword": "execVulnerability",
+                    "probReduction": "0.3"
+                }
+            ],
+            "cost": 1000
+        }
+    },
+    {
+        "CIS_09": {
+            "descr": "Email and Web Browser Protections",
+            "addressed_threats": [
+                {
+                    "tid": "tid11",
+                    "keyword": "webDisclosureVulnerability",
+                    "probReduction": "0.3"
+                }
+            ],
+        "cost": 1000
+        }
+    },
+    {
+        "CIS_10": {
+            "descr": "Malware Defenses",
+            "addressed_threats": [
+                {
+                    "tid": "tid02",
+                    "keyword": "ransomwareAttack",
+                    "probReduction": "0.3"
+                }
+            ],
+            "cost": 1000
+        }
+    },
+    {
+        "CIS_12": {
+            "descr": "Network Infrastructure Management",
+            "addressed_threats": [
+                {
+                    "tid": "tid11",
+                    "keyword": "webDisclosureVulnerability",
+                    "probReduction": "0.3"
+                },
+                {
+                    "tid": "tid05",
+                    "keyword": "execVulnerability",
+                    "probReduction": "0.3"
+                }
+            ],
+        "cost": 1000
+        }
+    },
+    {
+        "CIS_14": {
+            "descr": "Security Awareness and Skill Training",
+            "addressed_threats": [
+                {
+                    "tid": "tid08",
+                    "keyword": "spearPhishing",
+                    "probReduction": "0.3"
+                },
+                {
+                    "tid": "tid10",
+                    "keyword": "getDataFromStolenAsset",
+                    "probReduction": "0.3"
+                },
+                {
+                    "tid": "tid15",
+                    "keyword": "credential_stuffing",
+                    "probReduction": "0.3"
+                },
+                {
+                    "tid": "tid23",
+                    "keyword": "social_media_error",
+                    "probReduction": "0.3"
+                },
+                {
+                    "tid": "tid11",
+                    "keyword": "webDisclosureVulnerability",
+                    "probReduction": "0.3"
+                }
+            ],
+        "cost": 1000
+        }
+    },
+    {
+        "CIS_16": {
+            "descr": "Application Software Security",
+            "addressed_threats": [
+                {
+                    "tid": "tid11",
+                    "keyword": "webDisclosureVulnerability",
+                    "probReduction": "0.3"
+                }
+            ],
+            "cost": 1000
+        }
+    },
+    {
+        "OTH_01": {
+            "descr": "Employee rewards",
+            "addressed_threats": [
+                {
+                    "tid": "tid04",
+                    "keyword": "employeeStealsData",
+                    "probReduction": "0.3"
+                }
+            ],
+        "cost": 1000
+        }
+    },
+    {
+        "OTH_02": {
+            "descr": "Implement an employee engagement survey to reduce the employee disgruntling",
+            "addressed_threats": [
+                {
+                    "tid": "tid04",
+                    "keyword": "employeeStealsData",
+                    "probReduction": "0.3"
+                }
+            ],
+            "cost": 1000
+        }
+    },
+    {
+        "OTH_03": {
+            "descr": "Implement a process for reducing the employee turnover",
+            "addressed_threats": [
+                {
+                    "tid": "tid01",
+                    "keyword": "unsecureDataStorage",
+                    "probReduction": "0.3"
+                }
+            ],
+        "cost": 1000
+        }
+    },
+    {
+        "OTH_04": {
+            "descr": "Technical training for unskilled IT personal and software developers",
+            "addressed_threats": [
+                {
+                    "tid": "tid01",
+                    "keyword": "unsecureDataStorage",
+                    "probReduction": "0.3"
+                },
+                {
+                    "tid": "tid11",
+                    "keyword": "webDisclosureVulnerability",
+                    "probReduction": "0.3"
+                }
+            ],
+            "cost": 1000
+        }
+    }
+]

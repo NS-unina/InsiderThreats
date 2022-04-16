@@ -1,14 +1,14 @@
-CIS_03,Data Protection,"tid06,tid09,tid10"
+CIS_03,Data Protection,"tid06-tid09-tid10"
 CIS_04,Secure Configuration of Enterprise Assets and Software,tid05
 CIS_05,Account Management,tid07
 CIS_06,Access Control Management,tid04
-CIS_07,Continous Vulnerability Management,"tid11,tid05"
+CIS_07,Continous Vulnerability Management,"tid11-tid05"
 CIS_09,Email and Web Browser Protections,tid11
 CIS_10,Malware Defenses,tid02
-CIS_12,Network Infrastructure Management,"tid11,tid05"
-CIS_14,Security Awareness and Skill Training,"tid08,tid10,tid15,tid23,tid11"
+CIS_12,Network Infrastructure Management,"tid11-tid05"
+CIS_14,Security Awareness and Skill Training,"tid08-tid10-tid15-tid23-tid11"
 CIS_16,Application Software Security,tid11
 OTH_01,Employee rewards,tid04
 OTH_02,Implement an employee engagement survey to reduce the employee disgruntling,tid04
 OTH_03,Implement a process for reducing the employee turnover,tid01
-OTH_04,Technical training for unskilled IT personal and software developers,"tid01,tid11"
+OTH_04,Technical training for unskilled IT personal and software developers,"tid01-tid11"

@@ -3,26 +3,18 @@ import csv
 from model import *
 
 
-# pc = ProbCalculator([Node('a', 0.8), Node('b', 0.3)], 0)
-# combinations= pc.get_or()
-# for c in combinations:
-#     print("{} = {}".format(c.combination, c.prob))
-
-# p(pc.and_p())
-# p(pc.or_p())
-# c = Combinator(['a', 'b'])
-# print(c.combinations[0])
-# p(Combinator.is_all_one(c.combinations[3]))
-# p(Combinator.is_all_zeros(c.combinations[1]))
-# p(Combinator.is_all_zeros(c.combinations[0]))
-# p(Combinator.is_all_zeros(c.combinations[3]))
-# print(c.combinations[1].values())
 
 
 
-
-
-def setup_initial_cpt(g, vertices, tids):
+def setup_initial_cpt(g, vertices, tids, subset_security_controls):
+    """Set the initial cpts, by reducing them of a factor 
+    given by the security controls
+    Args:
+        g (GumObject): The gum utils object
+        vertices (List<Vertices>): The list of vertices
+        tids (List<Threats>): The list of threats
+        security_controls (List<Sec>): The applied security controls
+    """
     root_nodes = g.get_root_nodes()
     for r in root_nodes:
         v = Vertex.find_by_name(vertices, r.name)
@@ -30,9 +22,17 @@ def setup_initial_cpt(g, vertices, tids):
         # if v.is_tid():
         if Threat.is_vector_threat(tids, v.text):
             t = Threat.get_vector_threat(tids, v.text)
+            keyword = t.keyword
         else: 
             # For ransomware and data exfiltration
             t = Threat.get_by_id(tids, v.tid_id)
+        
+
+        # The implemented security controls reduce the probabilities before the set
+        threat_benefits = SecurityControl.get_threat_benefits(subset_security_controls, t)
+        t.apply_threat_benefits(threat_benefits)
+
+        # Once the threats are addressed, setup the base cpt
         g.set_root_cpt(r.name, t.p)
 
     # for r in root_nodes:
@@ -76,8 +76,6 @@ def reduce_graph(vertices, arcs):
         for gp in goal_parents:
             # Attach all vector threats and tid to or node
             vector_threat = Arc.get_parent_no_tid(arcs, gp)
-            print("GOAL {}".format(g.text))
-            print("Vector threat {}".format(vector_threat.text))
             vector_threats.append(vector_threat)
             # Add or node and vector_threat to node
             reduced_vertices = add_no_duplicate(reduced_vertices, vector_threat)
@@ -93,26 +91,7 @@ def reduce_graph(vertices, arcs):
         
 
             
-
-    for r in no_goals_vertices:
-        print("ID {} ".format(r.id))
-        # Set no goals vertices to vertices
-        dest = Arc.get_dest(arcs, r)
-        dest = Arc.get_dest(arcs, dest)
-        goal = Arc.get_dest(arcs, dest)
-        parents = Arc.get_parents(arcs, goal)
-        print("Goal: {}".format(goal.text))
-        print("NO PARENTS: {}".format(len(parents)))
-        # Arc.set_dest(arcs, r, goal)
-
-    rule_arcs = Arc.get_rules_arcs(rules_vertices, arcs)
-    for t in threat_goals:
-        rules_vertices.append(t)
-    for r in rule_arcs:
-        print("{} -> {}".format(r.src.text, r.dest.text))
-    return rules_vertices , rule_arcs
-
-def btg_generate():
+def btg_generate(subset_security_controls):
     if IS_SIMPLIFIED:
         vertices = Vertex.from_csv(simplified_folder(VERTICES_FILE))
         arcs = Arc.from_csv(simplified_folder(ARCS_FILE), vertices)
@@ -124,5 +103,5 @@ def btg_generate():
     rules_vertices, rules_arcs = reduce_graph(vertices, arcs) 
     g = GumUtils()
     g.generate_bayesian(rules_vertices, rules_arcs)
-    setup_initial_cpt(g, rules_vertices, tids)
+    setup_initial_cpt(g, rules_vertices, tids, subset_security_controls)
     return g

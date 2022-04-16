@@ -59,7 +59,30 @@ class AssetImpact:
         for a in assets: 
             if a.asset == host_name:
                 return a
+        raise Exception("Asset not found")
 
+
+class Risk:
+    def __init__(self, threat_prob, loss):
+        self.threat_prob    = threat_prob 
+        self.loss           = loss
+    def risk(self):
+        return self.threat_prob * self.loss
+
+
+    def total(risks):
+        """The total risk is given by the sum of threat risks 
+
+        Args:
+            risks (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        total = 0
+        for r in risks:
+            total = total + r.risk()
+        return total
 
 
 

@@ -1,4 +1,5 @@
 import re
+import json
 import csv
 from os import path
 import pyAgrum as gum
@@ -8,7 +9,10 @@ from functools import reduce
 from itertools import product
 
 
-def p(s):
+def pr(s):
+    print("[+] {}".format(s))
+
+def dbg(s):
     if DEBUG:
         print("[+] {}".format(s))
 
@@ -170,7 +174,6 @@ class GumNode:
         for n in names: 
             the_id = diag.idFromName(n)
             v = Vertex.find_by_name(vertices, n)
-            # print(v)
             gum_nodes.append(GumNode(diag, the_id, n, v.is_and(), v.is_or()))
         return gum_nodes
 
@@ -204,7 +207,7 @@ class GumUtils:
             self.diag = gum.BayesNet('BayesianThreatGraph')
         else:
             self.diag = diag
-        # self.nodes = GumNode.generate_nodes(self.diag)
+            #self.nodes = GumNode.generate_nodes(self.diag)
 
     """
         Returns true until the no of set cpts is equal to number of nodes 
@@ -247,12 +250,11 @@ class GumUtils:
 
 
     def generate_bayesian(self, vertices, arcs):
-        p("Set vertices")
+        dbg("Set vertices")
         for v in vertices:
             self.diag.add(gum.LabelizedVariable(v.get_name(), v.text, 2))
             self.no_nodes = self.no_nodes + 1
-            print(v)
-        p("Set arcs")
+        dbg("Set arcs")
         for a in arcs:
             self.diag.addArc(a.src.get_name(), a.dest.get_name())
             self.no_arcs = self.no_arcs + 1
@@ -269,7 +271,7 @@ class GumUtils:
         Returns:
             ProbCalculator: A list of "Combinator objects", namely, objects that allows the and / or noisy operation.
         """
-        p("Generate \"AND\" cpt for {} node".format(variable_name))
+        dbg("Generate \"AND\" cpt for {} node".format(variable_name))
         names = self.get_parents_names(variable_name)
         nodes = []
         for n in names:
@@ -291,7 +293,7 @@ class GumUtils:
         Returns:
             ProbCalculator: A list of "Combinator objects", namely, objects that allows the and / or noisy operation.
         """
-        p("Generate \"OR\" cpt for {} node".format(variable_name))
+        dbg("Generate \"OR\" cpt for {} node".format(variable_name))
         names = self.get_parents_names(variable_name)
         nodes = []
         for n in names:
@@ -318,10 +320,10 @@ class GumUtils:
         # Set cpt only if not already setted
         if node_name not in self.cpt_setted:
             self.diag.cpt(node_name).fillWith([1 - prob, prob])
-            p("{} cpt configured".format(node_name))
+            dbg("{} cpt configured".format(node_name))
             self.cpt_setted.append(node_name)
         else:
-            p("{} already set!".format(node_name))
+            dbg("{} already set!".format(node_name))
 
     def get_parents_names(self, name):
         parents = self.get_parents(name)
@@ -428,7 +430,7 @@ class Vertex:
         v = Vertex(row[0], row[1], row[2], row[3])
         # TODO: Other conditions
         if v.disallowed_in_graph() :
-            p("Skipped {}".format(v.get_name()))
+            dbg("Skipped {}".format(v.get_name()))
         else:
             ret.append(v)
     return ret
@@ -516,44 +518,139 @@ class ThreatImpact:
 
 
 class SecThreatBenefit:
-    def __init__(self, threat, sc, threat_benefit):
+    def __init__(self, threat, keyword, sc_name, prob_reduction):
         self.threat = threat
-        self.sc = sc
-        self.threat_benefit = threat_benefit
-        print("sc cost: {}".format(self.sc.cost))
-        print("threat benefit: {}".format(threat_benefit))
-        print("threat cost: {}".format(threat.impact))
+        self.keyword = keyword
+        self.sc = sc_name
+        self.prob_reduction = prob_reduction
 
-    def sc_implemented_no_threat(self):
-        # The sc is implemented but no threat
+    # def sc_implemented_no_threat(self):
+    #     # The sc is implemented but no threat
 
-        return -self.sc.cost 
+    #     return -self.sc.cost 
 
-    def sc_implemented_threat(self):
-        # The sc is implemented and threat occurs
-        return self.threat_benefit  - self.sc.cost - self.threat.impact
+    # def sc_implemented_threat(self):
+    #     # The sc is implemented and threat occurs
+    #     return self.threat_benefit  - self.sc.cost - self.threat.impact
 
-    def sc_no_implemented_threat(self):
-        # The sc is not implemented and threat
-        return - self.threat.impact
-    def sc_no_implemented_no_threat(self):
-        # The sc is not implemented and threat
-        return 0
+    # def sc_no_implemented_threat(self):
+    #     # The sc is not implemented and threat
+    #     return - self.threat.impact
+    # def sc_no_implemented_no_threat(self):
+    #     # The sc is not implemented and threat
+    #     return 0
     def get_name(self):
-        return self.sc.name + "-against-" + self.threat.tid
+        return self.sc + "-against-" + self.threat.tid
 
     def get_full_name(self):
-        return "Utility: "+ self.sc.name + "against" + self.threat.tid
+        return "Utility: "+ self.sc +  "against" + self.threat.tid
 
+
+class SecurityControlManager:
+    """ This class select a subset of security controls depending on a binary vector 
+    """
+
+    def __init__(self, security_controls):
+        self.security_controls = security_controls
+        # [0,0,0,0,...],[0,0,0,....]
+        self.combinations = list(product([0, 1], repeat=len(security_controls)))
+
+    def get_implementation_cost(self, subset):
+        """Return the implementation cost by summing all the SC costs
+
+        Args:
+            subset (List): The subset of implemented security controls
+        """
+        implementation_cost = sum([s.cost for s in subset])
+        return implementation_cost
+
+
+    def get_no_combinations(self):
+        return len(self.combinations)
+
+    def get_subset(self, no):
+        """Returns the relative subset of security controls from the combination
+        Args:
+            no (int): the nth subset combination
+
+        Returns:
+            List<SecurityControls>: The list of chosen security controls
+        """
+        nth_combination = self.combinations[no]
+        subset_security_controls = []
+        for index in range (0, len(nth_combination)):
+            # Append only if the value of the binary vector is 1
+            if nth_combination[index] == 1:
+                subset_security_controls.append(self.security_controls[index])
+
+        return subset_security_controls
+        
 
 class SecurityControl:
-    def __init__(self, name, cost):
+    def __init__(self, name, cost, addressed_threats = []):
        self.name = name
-       self.cost = cost
-       self.addressed_threats = []
+       self.cost = float(cost)
+       self.addressed_threats = addressed_threats
 
-    def add_threat(self, threat, threat_benefit):
-        self.addressed_threats.append(SecThreatBenefit(threat, self, threat_benefit))
+    def add_threat(self, threat, prob_reduction):
+        self.addressed_threats.append(SecThreatBenefit(threat, self, prob_reduction))
+
+    def address_threat(self, threat):
+        """ The methods returns true if the security control address a specific threat
+
+        Args:
+            threat (Threat): A Threat object
+
+        Return: True if the threat is addressed
+        """
+        for a in self.addressed_threats:
+            if a.keyword == threat.keyword or a.threat == threat.tid:
+                return True
+        return False
+
+    def get_threat_benefit(self, threat):
+        for a in self.addressed_threats:
+            if a.keyword == threat.keyword or a.threat == threat.tid:
+                return a
+        raise Exception("The threat is not addressed")
+
+    def get_threat_benefits(security_controls, t):
+        """ Return the threat benefit stored in the security control that address the threat
+        Args:
+            security_controls (List): The list of sec controls
+            t (Threat): A threat object
+
+        Return the threat benefits for that threat
+        """
+        ret = []
+        for s in security_controls: 
+            if s.address_threat(t):
+                threat_benefit = s.get_threat_benefit(t)
+                ret.append(threat_benefit)
+        return ret
+
+
+
+    def from_json(json_path):
+        security_controls = []
+        with open(json_path) as f:
+            data = json.load(f)
+            for d in data: 
+                cis_name = list(d.keys())[0]
+                info = d[cis_name]
+                addressed_threats = []
+                for t in info['addressed_threats']:
+                    tid = t['tid']
+                    keyword = t['keyword']
+                    probReduction = float(t['probReduction'])
+                    benefit = SecThreatBenefit(tid, keyword, cis_name, probReduction)
+                    addressed_threats.append(benefit)
+
+                sc = SecurityControl(cis_name, info['cost'], addressed_threats)
+                security_controls.append(sc)
+        return security_controls
+
+
 
 
 class Threat:
@@ -563,20 +660,41 @@ class Threat:
         self.description = description
         self.p = p
 
+    def apply_threat_benefits(self, threat_benefits):
+        """ Apply the threat benefits that reduce the probability
+        For each threat benefit obtained by the security controls that address the threat, 
+        reduce the threat. 
+        Args:
+            threat_benefits (List): The list of threat benefits that reduce the threat probability
+        """
+        dbg("Apply threat reduction for {}".format(self.tid))
+        for tb in threat_benefits: 
+            prob_reduction = tb.prob_reduction
+            dbg("Apply prob reduction of {}".format(prob_reduction))
+            old_prob = self.p
+            self.p = prob_reduction * self.p
+            dbg("Old prob: {} New: {}".format(old_prob, self.p))
+
+        if len(threat_benefits) > 0:
+            dbg("Reduced probability: {}".format(self.p))
+
+
     def get_by_id(threats, tid):
         if tid is None:
             raise Exception("tid cannot be null")
+        # or "TID_{}".format(t.description.replace("tid", "")):
         for t in threats:
-            if t.tid == tid or "TID_{}".format(t.description.replace("tid", "")):
+            if t.tid == tid:
                 return t
         else:
             raise Exception("Tid not found")
-    
+
     def from_csv(f):
         ret = []
         with open(f) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             for row in csv_reader:
+                # TID_X => tidx
                 tid = row[0].replace("_", "").lower()
                 keyword = row[1]
                 descr = row[2]
