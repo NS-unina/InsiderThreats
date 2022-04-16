@@ -1,0 +1,9 @@
+VERTICES_FILE           = "VERTICES.CSV"
+ARCS_FILE               = "ARCS.CSV"
+TID_FILE                = "thid.csv"
+ASSETS_FILE             = "asset_records.csv"
+SC_ASSOCIATION_FILE     = "scAssociation.csv"
+IS_SIMPLIFIED           = False
+TEST_BENEFIT_SC         = 0
+TEST_THREAT_IMPACT      = 100000
+DEBUG                   = True

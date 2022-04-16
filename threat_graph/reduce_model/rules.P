@@ -1,0 +1,118 @@
+/*Predicates declarations*/
+
+/* The employee is not able to understand the security impacts of his/her actions */
+primitive(unawareness(_victim)).
+
+/* The employee has a mail account */
+primitive(hasMailAccount(_victim)).
+/* The employee is sending an email */
+primitive(isSendingMail(_victim, _content)).
+
+/* The employee uses social media at work */
+primitive(useSocial(_victim)).
+
+/* consequences could be data disclosure or remote code execution */
+primitive(vulExists(_host, _vulID, _privilege)).
+primitive(vulAllowsCodeExecution(_vulID)).
+primitive(vulDisclosesData(_vulID)).
+/* The host is public */
+primitive(isPublic(_host)).
+
+/* The host is a webserver */
+primitive(isWeb(_vuln)).
+primitive(noWeb(_vuln)).
+
+/* Is a data storage */
+primitive(isDataStorage(_host)).
+
+/* The user administrates the host */
+primitive(isAdminOf(_user, _host)).
+
+/* The user has access to the host with specific permissions (read or exec) */
+primitive(hasAccess(_user, _host, _permission)).
+
+/* Data are located in the asset */
+primitive(dataInAsset(_asset, _data)).
+
+/* The attacker has physical access to the host */
+primitive(hasPhysicalAccess(_attacker, _host)).
+
+/* 
+primitive(overWorking(_user)).
+primitive(unSkilled(_user)).
+*/
+
+/* The employee makes an error */
+primitive(humanError(_user)).
+
+/* The employee has the insiderness property */
+primitive(insiderness(_user)).
+
+/* The employee has breached credentials */
+primitive(hasCredentialBreached(victim)).
+
+/* The employee uses a personal password on the host */
+primitive(reusePassword(victim, Host)).
+
+/**** GLOBAL PRIMITIVE THREATS *******/
+
+derived(webDisclosureVulnerability(_host, _consequence)).
+derived(dataExfiltration(_data, _host)).
+derived(skimmingDevice(_attacker, _host)).
+meta(attackGoal(_)).
+
+/* Tabling predicates */
+:- table webDisclosureVulnerability/11.
+:- table dataExfiltration/17.
+:- table skimmingDevice/3.
+
+
+
+/******************************************************/
+/****         Exploitation threats                        *****/
+/******************************************************/
+
+/****         Ransowmare                                    *****/
+
+
+
+/****         Information disclosure                                    *****/
+/* TID_17 */
+interaction_rule(
+    (dataExfiltration(DataDisclosure, Host) :- webDisclosureVulnerability(Host, Vuln)),
+    rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
+
+interaction_rule(
+    (dataExfiltration(DataDisclosure, Asset) :- skimmingDevice(Attacker, Asset)),
+    rule_desc('TID_17 - Data exfiltration from a company asset', 17)).
+
+
+
+
+
+
+/******************************************************/
+/****         Internal threats                         *****/
+/******************************************************/
+
+
+
+
+/******************************************************/
+/****         Vector threats                        *****/
+/******************************************************/
+
+
+
+/* TID_03 */
+interaction_rule(
+    (skimmingDevice(Attacker, Host) :- hasPhysicalAccess(Attacker, Host)),
+    rule_desc('TID_03 - The attacker installs a skimming device to exfiltrate data', 1)).
+
+
+
+
+/* TID_11 */
+interaction_rule(
+    (webDisclosureVulnerability(Host, Vuln) :- vulExists(Host, Vuln, information_disclosure), isWeb(Vuln)),
+    rule_desc('TID_11 - A web vulnerability affects the webserver', 11)).

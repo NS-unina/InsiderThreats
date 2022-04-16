@@ -3,17 +3,10 @@ import csv
 from os import path
 import pyAgrum as gum
 import sys
+from variables import *
 from functools import reduce
 from itertools import product
 
-VERTICES_FILE = "VERTICES.CSV"
-ARCS_FILE = "ARCS.CSV"
-TID_FILE = "thid.csv"
-SC_ASSOCIATION_FILE = "scAssociation.csv"
-IS_SIMPLIFIED = False
-TEST_BENEFIT_SC = 0
-TEST_THREAT_IMPACT     = 100000
-DEBUG = True
 
 def p(s):
     if DEBUG:
@@ -228,7 +221,13 @@ class GumUtils:
     def get_root_nodes(self):
         return [n for n in self.nodes if n.is_root]
 
-    def get_leaf_nodes(self):
+    def get_or_nodes(self):
+      """ 
+        Returns a list of OR nodes . It is used to generate the final threat graph
+      """
+      return [n for n in self.nodes if n.is_or]
+
+    def get_goal_nodes(self):
         """ Returns a list of GUM Nodes
 
         Returns:
@@ -246,11 +245,13 @@ class GumUtils:
     def get_children(self, id):
         return self.diag.children(id)
 
+
     def generate_bayesian(self, vertices, arcs):
         p("Set vertices")
         for v in vertices:
             self.diag.add(gum.LabelizedVariable(v.get_name(), v.text, 2))
             self.no_nodes = self.no_nodes + 1
+            print(v)
         p("Set arcs")
         for a in arcs:
             self.diag.addArc(a.src.get_name(), a.dest.get_name())
@@ -312,6 +313,8 @@ class GumUtils:
             self.diag.cpt(node_name)[c.combination] = [c.prob.p_false, c.prob.p_true]
 
     def set_root_cpt(self, node_name, prob):
+        if prob == None:
+            raise Exception("Prob cannot be None")
         # Set cpt only if not already setted
         if node_name not in self.cpt_setted:
             self.diag.cpt(node_name).fillWith([1 - prob, prob])
@@ -345,11 +348,29 @@ class Vertex:
     if self.is_tid():
       self.tid_id = self.extract_tid_id()
 
+  def extract_keyword(vertex_text):
+        par_index = vertex_text.find('(')
+        if par_index != -1 and "OR" not in vertex_text:
+            return vertex_text[0:par_index]
+        return None
+
+  def is_threat_goal(self):
+      return "TID_17" in self.text  or "TID_02" in self.text
+
+  def is_final_node(self):
+      """The final nodes that ends for "dataExfiltration" or "ransomwareAttack"
+
+      Returns:
+          Vertex: the final node 
+      """
+      return "dataExfiltration" in self.text or "ransomware" in self.text
+
   def is_leaf(self):
     return self.type == "LEAF"
 
   def is_and(self):
     return self.type == "AND"
+
 
   def is_or(self):
     return self.type == "OR"
@@ -416,6 +437,56 @@ class Arc:
     def __init__(self, src, dest):
         self.src = src
         self.dest = dest 
+
+    def get_dest(arcs, src):
+        for a in arcs:
+            if a.src.id == src.id:
+                return a.dest
+
+    def set_dest(arcs, r, goal):
+        for a in arcs:
+            if a.src.id == r.id:
+                a.dest = goal
+
+    def get_parent_tid(arcs, g):
+        for a in arcs:
+            if a.dest.id == g.id and a.src.is_tid():
+                return a.src
+
+    def get_parent_no_tid(arcs, g):
+        for a in arcs:
+            if a.dest.id == g.id and not a.src.is_tid():
+                return a.src
+
+    def get_parents(arcs, g):
+        """Get all parents of a node
+        This is useful to generate OR conditions in the BTG
+
+        Args:
+            arcs (list): A list f nodes
+            g (Vertex): The destination node
+
+        Returns:
+            Vertex: The source node
+        """
+        parents = []
+        for a in arcs:
+            if a.dest.id == g.id:
+                parents.append(a.src)
+
+        return parents
+            
+
+
+    def get_rules_arcs(rule_vertices, arcs):
+        rule_arcs = []
+        for r in rule_vertices:
+            d = Arc.get_dest(arcs, r)
+            rule_arcs.append(Arc(r, d))
+        return rule_arcs
+
+            
+
 
     def from_csv(f, vertices):
       ret = []
@@ -486,16 +557,20 @@ class SecurityControl:
 
 
 class Threat:
-    def __init__(self, tid, description, p):
+    def __init__(self, tid, keyword, description, p):
         self.tid = tid
+        self.keyword = keyword
         self.description = description
         self.p = p
 
     def get_by_id(threats, tid):
+        if tid is None:
+            raise Exception("tid cannot be null")
         for t in threats:
-            if t.tid == tid: 
+            if t.tid == tid or "TID_{}".format(t.description.replace("tid", "")):
                 return t
-        return None
+        else:
+            raise Exception("Tid not found")
     
     def from_csv(f):
         ret = []
@@ -503,10 +578,28 @@ class Threat:
             csv_reader = csv.reader(csv_file, delimiter=',')
             for row in csv_reader:
                 tid = row[0].replace("_", "").lower()
-                descr = row[1]
-                p = float(row[4])
-                ret.append(Threat(tid, descr, p))
+                keyword = row[1]
+                descr = row[2]
+                p = float(row[5])
+                ret.append(Threat(tid, keyword, descr, p))
         return ret
+
+
+    def is_vector_threat(threats, vertex_text):
+        ret = False
+        if Threat.get_vector_threat(threats, vertex_text):
+            ret = True
+        return ret
+
+    def get_vector_threat(threats, vertex_text):
+        ret = None
+        for t in threats:
+            keyword = Vertex.extract_keyword(vertex_text)
+            if keyword:
+                if keyword == t.keyword and t.keyword != "dataExfiltration" and t.keyword != "ransomwareAttack":
+                    ret = t
+        return ret
+            
 
 
 

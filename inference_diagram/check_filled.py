@@ -1,6 +1,11 @@
-# import pyAgrum.lib.notebook as gnb
+import csv
+import pyAgrum as gum
+import re
+import itertools
 from model import *
 from btg_generator import *
+import re
+
 gu = GumUtils()
 gu = btg_generate()
 
@@ -23,12 +28,19 @@ def cpt(gu, names):
 
 
 
-leaf_nodes = GumNode.get_names(gu.get_leaf_nodes())
+leaf_nodes = GumNode.get_names(gu.get_goal_nodes())
 # print(leaf_nodes[0])
 print(leaf_nodes[0])
 for l in leaf_nodes:
     cpt(gu, [l])
-gum.saveBN(gu.diag, "filled_btg.bifxml")
-print("btg filled saved")
-    # cpt(gu, l)
-# gnb.showBN(gu.diag)
+# gum.saveBN(gu.diag, "filled_btg.bifxml")
+# print("btg filled saved")
+
+goal_nodes = gu.get_goal_nodes()
+
+p("Make inference")
+ie=gum.LazyPropagation(gu.diag)
+ie.makeInference()
+for l in goal_nodes:
+    print(ie.posterior(l.name))
+# print (ie.posterior("w"))
