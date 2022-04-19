@@ -3,6 +3,10 @@ from model import *
 from risk import *
 from btg_generator import *
 from operator import attrgetter
+import argparse
+import csv
+
+output = True
 
 def ps():
     print("\n=============================\n")
@@ -33,7 +37,8 @@ def get_prob(ie, name):
     return ie.posterior(name)[1]
 
 class PerformanceCombination:
-    """This class contains the list of combinations with relative performance costs
+    """
+        This class contains the list of combinations with relative performance costs
     """
     def __init__(self, no_combination, performance, risk):
         self.no_combination  = no_combination
@@ -53,7 +58,6 @@ def run_combination(no_combination):
     subset = scm.get_subset(no_combination)
     implementation_cost = scm.get_implementation_cost(subset)   
     pr("No of implemented security controls: {}".format(len(subset)))
-
 
     """ 
         Generate the bayesian threat graph, 
@@ -97,13 +101,17 @@ def run_combination(no_combination):
     if implementation_cost != 0:
         performance_value = total_risk / implementation_cost
     performance_obj = PerformanceCombination(no_combination, performance_value, total_risk)
-    performance_list.append(performance_obj)
-
+    
     ps()
     pr("Implementation cost: {}".format(implementation_cost))
     pr("Total risk: {}".format(total_risk))
     pr("Performance val: {}".format(performance_value))
     ps()
+
+    return performance_obj
+    performance_list.append(performance_obj)
+
+    
 
 
 
@@ -112,13 +120,20 @@ def run_combination(no_combination):
 
 
 if __name__ == "__main__":
+    #parser = argparse.ArgumentParser(description='Chose optimium SC')
+    
+
     gu = GumUtils()
     # Initialize the security control
     no_combinations = scm.get_no_combinations()
     pr("No security control combinations: {}".format(no_combinations))
-    for i in range(0, no_combinations):
-        run_combination(i)
-    
+    with open('result.csv', mode='w') as file:
+        for i in range(0, no_combinations):
+            performace_result = run_combination(i)
+            performance_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            performance_writer.writerow([performace_result.no_combination, performace_result.performance, performace_result.risk])
+            performance_list.append(performace_result)
+        
     best_perf = PerformanceCombination.best_performance(performance_list)
     min_risk  = PerformanceCombination.minimal_risk(performance_list)
     pr("The best performance ({}) is given by combination {}".format(best_perf.performance, best_perf.no_combination))
