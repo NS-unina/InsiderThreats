@@ -181,3 +181,5 @@ cython_debug/
 share
 Scripts
 pyvenv.cfg
+
+result.csv
