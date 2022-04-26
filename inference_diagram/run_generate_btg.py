@@ -40,10 +40,11 @@ class PerformanceCombination:
     """
         This class contains the list of combinations with relative performance costs
     """
-    def __init__(self, no_combination, performance, risk):
+    def __init__(self, no_combination, performance, risk, cost):
         self.no_combination  = no_combination
         self.performance = performance
         self.risk = risk
+        self.cost = cost
     def best_performance(performance_list):
         best = max(performance_list, key=attrgetter('performance'))
         return best
@@ -57,6 +58,7 @@ class PerformanceCombination:
 def run_combination(no_combination):
     subset = scm.get_subset(no_combination)
     implementation_cost = scm.get_implementation_cost(subset)   
+    print(implementation_cost)
     pr("No of implemented security controls: {}".format(len(subset)))
 
     """ 
@@ -100,7 +102,7 @@ def run_combination(no_combination):
     # Only consider implementation costs
     if implementation_cost != 0:
         performance_value = total_risk / implementation_cost
-    performance_obj = PerformanceCombination(no_combination, performance_value, total_risk)
+    performance_obj = PerformanceCombination(no_combination, performance_value, total_risk, implementation_cost)
     
     ps()
     pr("Implementation cost: {}".format(implementation_cost))
@@ -112,36 +114,27 @@ def run_combination(no_combination):
     performance_list.append(performance_obj)
 
     
-
-
-
-    
-
-
-
 if __name__ == "__main__":
     #parser = argparse.ArgumentParser(description='Chose optimium SC')
     
-
     gu = GumUtils()
+    
     # Initialize the security control
     no_combinations = scm.get_no_combinations()
+
     pr("No security control combinations: {}".format(no_combinations))
+    
     with open('result.csv', mode='w') as file:
         for i in range(0, no_combinations):
             performace_result = run_combination(i)
             performance_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            performance_writer.writerow([performace_result.no_combination, performace_result.performance, performace_result.risk])
+            performance_writer.writerow([performace_result.no_combination, performace_result.performance, performace_result.risk, performace_result.cost])
             performance_list.append(performace_result)
         
     best_perf = PerformanceCombination.best_performance(performance_list)
     min_risk  = PerformanceCombination.minimal_risk(performance_list)
     pr("The best performance ({}) is given by combination {}".format(best_perf.performance, best_perf.no_combination))
     pr("The minimal risk ({}) is given by combination {}".format(min_risk.risk, min_risk.no_combination))
-    
-
-
-
 
 
     # gum.saveBN(gu.diag, "filled_btg.bifxml")

@@ -9,7 +9,7 @@
                     "probReduction": "0.3"
                 }
             ],
-            "cost": 1000
+            "cost": 4500
         }
     },
     {
@@ -53,7 +53,7 @@
                     "probReduction": "0.3"
                 }
             ],
-            "cost": 1000
+            "cost": 4500
         }
     },
     {
@@ -66,7 +66,7 @@
                     "probReduction": "0.3"
                 }
             ],
-        "cost": 1000
+        "cost": 2000
         }
     },
     {
@@ -79,7 +79,7 @@
                     "probReduction": "0.3"
                 }
             ],
-            "cost": 1000
+            "cost": 6000
         }
     },
     {
@@ -97,7 +97,7 @@
                     "probReduction": "0.3"
                 }
             ],
-        "cost": 1000
+        "cost": 2000
         }
     },
     {
@@ -130,7 +130,7 @@
                     "probReduction": "0.3"
                 }
             ],
-        "cost": 1000
+        "cost": 2000
         }
     },
     {
@@ -143,7 +143,7 @@
                     "probReduction": "0.3"
                 }
             ],
-            "cost": 1000
+            "cost": 4000
         }
     },
     {
@@ -156,7 +156,7 @@
                     "probReduction": "0.3"
                 }
             ],
-        "cost": 1000
+        "cost": 30000
         }
     },
     {
@@ -169,7 +169,7 @@
                     "probReduction": "0.3"
                 }
             ],
-            "cost": 1000
+            "cost": 30000
         }
     },
     {
@@ -182,7 +182,7 @@
                     "probReduction": "0.3"
                 }
             ],
-        "cost": 1000
+        "cost": 30000
         }
     },
     {
@@ -200,7 +200,7 @@
                     "probReduction": "0.3"
                 }
             ],
-            "cost": 1000
+            "cost": 10000
         }
     }
 ]
