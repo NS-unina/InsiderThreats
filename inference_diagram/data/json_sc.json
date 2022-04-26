@@ -6,7 +6,7 @@
                 {
                     "tid": "tid05",
                     "keyword": "execVulnerability",
-                    "probReduction": "0.3"
+                    "probReduction": "0.6"
                 }
             ],
             "cost": 4500
@@ -32,7 +32,7 @@
                 {
                     "tid": "tid04",
                     "keyword": "employeeStealsData",
-                    "probReduction": "0.3"
+                    "probReduction": "0.25"
                 }
             ],
             "cost": 1000
@@ -45,12 +45,12 @@
                 {
                     "tid": "tid11",
                     "keyword": "webDisclosureVulnerability",
-                    "probReduction": "0.3"
+                    "probReduction": "0.6"
                 },
                 {
                     "tid": "tid05",
                     "keyword": "execVulnerability",
-                    "probReduction": "0.3"
+                    "probReduction": "0.6"
                 }
             ],
             "cost": 4500
@@ -63,7 +63,7 @@
                 {
                     "tid": "tid11",
                     "keyword": "webDisclosureVulnerability",
-                    "probReduction": "0.3"
+                    "probReduction": "0.8"
                 }
             ],
         "cost": 2000
@@ -76,7 +76,7 @@
                 {
                     "tid": "tid02",
                     "keyword": "ransomwareAttack",
-                    "probReduction": "0.3"
+                    "probReduction": "0.28"
                 }
             ],
             "cost": 6000
@@ -89,12 +89,12 @@
                 {
                     "tid": "tid11",
                     "keyword": "webDisclosureVulnerability",
-                    "probReduction": "0.3"
+                    "probReduction": "0.1"
                 },
                 {
                     "tid": "tid05",
                     "keyword": "execVulnerability",
-                    "probReduction": "0.3"
+                    "probReduction": "0.1"
                 }
             ],
         "cost": 2000
@@ -107,27 +107,27 @@
                 {
                     "tid": "tid08",
                     "keyword": "spearPhishing",
-                    "probReduction": "0.3"
+                    "probReduction": "0.7"
                 },
                 {
                     "tid": "tid10",
                     "keyword": "getDataFromStolenAsset",
-                    "probReduction": "0.3"
+                    "probReduction": "0.7"
                 },
                 {
                     "tid": "tid15",
                     "keyword": "credential_stuffing",
-                    "probReduction": "0.3"
+                    "probReduction": "0.7"
                 },
                 {
                     "tid": "tid23",
                     "keyword": "social_media_error",
-                    "probReduction": "0.3"
+                    "probReduction": "0.7"
                 },
                 {
                     "tid": "tid11",
                     "keyword": "webDisclosureVulnerability",
-                    "probReduction": "0.3"
+                    "probReduction": "0.7"
                 }
             ],
         "cost": 2000
@@ -140,7 +140,7 @@
                 {
                     "tid": "tid11",
                     "keyword": "webDisclosureVulnerability",
-                    "probReduction": "0.3"
+                    "probReduction": "0.9"
                 }
             ],
             "cost": 4000
@@ -153,7 +153,7 @@
                 {
                     "tid": "tid04",
                     "keyword": "employeeStealsData",
-                    "probReduction": "0.3"
+                    "probReduction": "0.8"
                 }
             ],
         "cost": 30000
@@ -166,7 +166,7 @@
                 {
                     "tid": "tid04",
                     "keyword": "employeeStealsData",
-                    "probReduction": "0.3"
+                    "probReduction": "0.8"
                 }
             ],
             "cost": 30000
@@ -179,7 +179,7 @@
                 {
                     "tid": "tid01",
                     "keyword": "unsecureDataStorage",
-                    "probReduction": "0.3"
+                    "probReduction": "0.8"
                 }
             ],
         "cost": 30000
@@ -192,12 +192,12 @@
                 {
                     "tid": "tid01",
                     "keyword": "unsecureDataStorage",
-                    "probReduction": "0.3"
+                    "probReduction": "0.6"
                 },
                 {
                     "tid": "tid11",
                     "keyword": "webDisclosureVulnerability",
-                    "probReduction": "0.3"
+                    "probReduction": "0.6"
                 }
             ],
             "cost": 10000

@@ -58,7 +58,6 @@ class PerformanceCombination:
 def run_combination(no_combination):
     subset = scm.get_subset(no_combination)
     implementation_cost = scm.get_implementation_cost(subset)   
-    print(implementation_cost)
     pr("No of implemented security controls: {}".format(len(subset)))
 
     """ 
