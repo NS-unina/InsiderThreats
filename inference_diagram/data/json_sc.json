@@ -22,7 +22,7 @@
                     "probReduction": "0.3"
                 }
             ],
-            "cost": 1000
+            "cost": 12000
         }
     },
     {
@@ -35,7 +35,7 @@
                     "probReduction": "0.25"
                 }
             ],
-            "cost": 1000
+            "cost": 12000
         }
     },
     {
@@ -53,7 +53,7 @@
                     "probReduction": "0.6"
                 }
             ],
-            "cost": 4500
+            "cost": 54000
         }
     },
     {
@@ -66,7 +66,7 @@
                     "probReduction": "0.8"
                 }
             ],
-        "cost": 2000
+        "cost": 24000
         }
     },
     {
@@ -79,7 +79,7 @@
                     "probReduction": "0.28"
                 }
             ],
-            "cost": 6000
+            "cost": 72000
         }
     },
     {
@@ -130,7 +130,7 @@
                     "probReduction": "0.7"
                 }
             ],
-        "cost": 2000
+        "cost": 1000
         }
     },
     {
