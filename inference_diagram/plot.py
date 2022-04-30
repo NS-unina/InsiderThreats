@@ -48,8 +48,8 @@ yValue = list(bestResult.values())
 fig = plt.figure()
 
 plt.plot(xValue, yValue,'o',markersize=1)
-plt.xlabel('Risk')
-plt.ylabel('Cost')
+plt.ylabel('Risk')
+plt.xlabel('Cost')
 
 
 
