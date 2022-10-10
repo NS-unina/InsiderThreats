@@ -19,7 +19,7 @@ assets = AssetImpact.from_csv()
 performance_list = []
 
 def cpt(gu, names):
-    for var_name in names: 
+    for var_name in names:
         if not gu.has_parents(var_name):
             dbg("root node skip {}".format(var_name))
         else:
@@ -58,14 +58,14 @@ class PerformanceCombination:
 
 def run_combination(no_combination):
     subset = scm.get_subset(no_combination)
-    implementation_cost = scm.get_implementation_cost(subset)   
+    implementation_cost = scm.get_implementation_cost(subset)
     dbg("No of implemented security controls: {}".format(len(subset)))
 
-    """ 
-        Generate the bayesian threat graph, 
-        this involves three steps: 
+    """
+        Generate the bayesian threat graph,
+        this involves three steps:
         1. Generate the reduced threat graph
-        2. Generate the bayesian threat graph 
+        2. Generate the bayesian threat graph
         3. Setup the cpt
     """
     gu = btg_generate(subset)
@@ -83,7 +83,7 @@ def run_combination(no_combination):
     ie.makeInference()
     gum_nodes = gu.get_goal_nodes()
     ps()
-    dbg("Reduced probabilities:") 
+    dbg("Reduced probabilities:")
     for g in gum_nodes:
         dbg("{} = {}".format(g.name, get_prob(ie, g.name)))
     ps()
@@ -103,7 +103,7 @@ def run_combination(no_combination):
     if implementation_cost != 0:
         performance_value = total_risk / implementation_cost
     performance_obj = PerformanceCombination(no_combination, performance_value, total_risk, implementation_cost)
-    
+
     ps()
     dbg("Implementation cost: {}".format(implementation_cost))
     dbg("Total risk: {}".format(total_risk))
@@ -113,27 +113,28 @@ def run_combination(no_combination):
     return performance_obj
     performance_list.append(performance_obj)
 
-    
+
 if __name__ == "__main__":
     #parser = argparse.ArgumentParser(description='Chose optimium SC')
-    
+
     # gu = GumUtils()
     vertices = Vertex.from_csv(complete_folder(VERTICES_FILE))
     pr("No vertices: {}".format(len(vertices)))
-    
+
     # Initialize the security control
     no_combinations = scm.get_no_combinations()
 
     pr("No security control combinations: {}".format(no_combinations))
-    
+
     with open('result.csv', mode='w') as file:
-        for i in range(0, no_combinations):
+        # for i in range(0, no_combinations):
+        for i in range(0, 1):
             print("Combination no. {}".format(i))
             performace_result = run_combination(i)
             performance_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             performance_writer.writerow([performace_result.no_combination, performace_result.performance, performace_result.risk, performace_result.cost])
             performance_list.append(performace_result)
-        
+
     best_perf = PerformanceCombination.best_performance(performance_list)
     min_risk  = PerformanceCombination.minimal_risk(performance_list)
     pr("The best performance ({}) is given by combination {}".format(best_perf.performance, best_perf.no_combination))

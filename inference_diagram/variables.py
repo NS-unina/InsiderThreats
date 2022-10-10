@@ -6,4 +6,4 @@ SC_ASSOCIATION_FILE     = "scAssociation.csv"
 IS_SIMPLIFIED           = False
 TEST_BENEFIT_SC         = 0
 TEST_THREAT_IMPACT      = 100000
-DEBUG                   = False
+DEBUG                   = True

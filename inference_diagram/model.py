@@ -46,7 +46,7 @@ class Node:
       self.name = name
       self.prob_true = prob_true
 
-        
+
 class ProbCombination:
     def __init__(self, combination, p):
         self.combination = combination
@@ -57,7 +57,7 @@ class ProbCombination:
 
 class ProbCalculator:
     """
-      Accept a list of prob nodes and generate the and and or 
+      Accept a list of prob nodes and generate the and and or
     """
     def __init__(self, nodes, is_and = 1):
         self.nodes = nodes
@@ -86,7 +86,7 @@ class ProbCalculator:
                 a.prob = ProbVal(self.and_p())
             and_probabilities.append(a)
         return and_probabilities
-        
+
     def get_or(self):
         # ALL COMBINATIONS TO 0 EXCEPT ALL ONES THAT HAS AND PROB
         comb = Combinator([n.name for n in self.nodes])
@@ -95,7 +95,7 @@ class ProbCalculator:
             a = ProbCombination(c, ProbVal(0))
             if Combinator.is_all_zeros(c):
                 a.prob = ProbVal(0)
-            else: 
+            else:
                 a.prob = ProbVal(self.or_p())
             or_probabilities.append(a)
         return or_probabilities
@@ -103,12 +103,12 @@ class ProbCalculator:
 class Combinator:
     def __init__(self, names):
         # if len(names) == 2, then : [(0, 0), (0, 1), (1, 0), (1, 1)]
-        combinations = list(product([0, 1], repeat = len(names))) 
+        combinations = list(product([0, 1], repeat = len(names)))
         generated_combinations = []
         for c in combinations:
             generated = dictionary = dict(zip(names, c))
             generated_combinations.append(generated)
-        self.names = names 
+        self.names = names
         self.combinations = generated_combinations
 
     def is_all_one(combination):
@@ -157,7 +157,7 @@ class GumNode:
 
     def get_cpt(self):
         return self.diag.cpt(self.id)
-    
+
     def generate_nodes(diag, vertices):
         """Generate nodes from pyagrum diag
         Takes diag names, for each name extract the id and append to GumNode structure
@@ -171,7 +171,7 @@ class GumNode:
         """
         names = diag.names()
         gum_nodes = []
-        for n in names: 
+        for n in names:
             the_id = diag.idFromName(n)
             v = Vertex.find_by_name(vertices, n)
             gum_nodes.append(GumNode(diag, the_id, n, v.is_and(), v.is_or()))
@@ -182,19 +182,19 @@ class GumNode:
 
     def find_by_name(gum_nodes, name):
         for g in gum_nodes:
-            if g.name == name: 
+            if g.name == name:
                 return g
         return None
 
 
     def find_by_id(gum_nodes, id):
         for g in gum_nodes:
-            if g.id == id: 
+            if g.id == id:
                 return g
         return None
 
 
-            
+
 
 
 class GumUtils:
@@ -203,17 +203,17 @@ class GumUtils:
         self.no_nodes = 0
         self.no_arcs = 0
         self.nodes = []
-        if diag is None: 
+        if diag is None:
             self.diag = gum.BayesNet('BayesianThreatGraph')
         else:
             self.diag = diag
             #self.nodes = GumNode.generate_nodes(self.diag)
 
     """
-        Returns true until the no of set cpts is equal to number of nodes 
+        Returns true until the no of set cpts is equal to number of nodes
     """
     def remaining_cpt(self):
-        return len(self.cpt_setted) < self.no_nodes 
+        return len(self.cpt_setted) < self.no_nodes
 
     def has_parents(self, id):
         return len(self.diag.parents(id)) != 0
@@ -225,7 +225,7 @@ class GumUtils:
         return [n for n in self.nodes if n.is_root]
 
     def get_or_nodes(self):
-      """ 
+      """
         Returns a list of OR nodes . It is used to generate the final threat graph
       """
       return [n for n in self.nodes if n.is_or]
@@ -255,9 +255,15 @@ class GumUtils:
             self.diag.add(gum.LabelizedVariable(v.get_name(), v.text, 2))
             self.no_nodes = self.no_nodes + 1
         dbg("Set arcs")
+        dbg(len(arcs))
+        i = 0
         for a in arcs:
+            dbg("Add arcs")
+            dbg(i)
+            i = i +1
             self.diag.addArc(a.src.get_name(), a.dest.get_name())
             self.no_arcs = self.no_arcs + 1
+        dbg("Generate nodes")
         self.nodes = GumNode.generate_nodes(self.diag, vertices)
 
     def generate_and_cpt(self, variable_name):
@@ -343,8 +349,8 @@ class GumUtils:
 class Vertex:
   def __init__(self, id, text, type,  number):
     self.id = str(id)
-    self.text = text 
-    self.type = type 
+    self.text = text
+    self.type = type
     self.number = number
     self.tid_id = None
     if self.is_tid():
@@ -363,7 +369,7 @@ class Vertex:
       """The final nodes that ends for "dataExfiltration" or "ransomwareAttack"
 
       Returns:
-          Vertex: the final node 
+          Vertex: the final node
       """
       return "dataExfiltration" in self.text or "ransomware" in self.text
 
@@ -378,7 +384,7 @@ class Vertex:
     return self.type == "OR"
 
   def is_tid(self):
-    return "tid" in self.text 
+    return "tid" in self.text
 
   def extract_tid_id(self):
       return re.sub("\(.*?\)", "", self.text)
@@ -438,7 +444,7 @@ class Vertex:
 class Arc:
     def __init__(self, src, dest):
         self.src = src
-        self.dest = dest 
+        self.dest = dest
 
     def get_dest(arcs, src):
         for a in arcs:
@@ -477,7 +483,7 @@ class Arc:
                 parents.append(a.src)
 
         return parents
-            
+
 
 
     def get_rules_arcs(rule_vertices, arcs):
@@ -487,7 +493,7 @@ class Arc:
             rule_arcs.append(Arc(r, d))
         return rule_arcs
 
-            
+
 
 
     def from_csv(f, vertices):
@@ -507,7 +513,7 @@ class Arc:
 
 # class FinalSC:
 #     def is_tid_final(id):
-        # return id == 
+        # return id ==
 
 
 
@@ -527,7 +533,7 @@ class SecThreatBenefit:
     # def sc_implemented_no_threat(self):
     #     # The sc is implemented but no threat
 
-    #     return -self.sc.cost 
+    #     return -self.sc.cost
 
     # def sc_implemented_threat(self):
     #     # The sc is implemented and threat occurs
@@ -547,7 +553,7 @@ class SecThreatBenefit:
 
 
 class SecurityControlManager:
-    """ This class select a subset of security controls depending on a binary vector 
+    """ This class select a subset of security controls depending on a binary vector
     """
 
     def __init__(self, security_controls):
@@ -584,7 +590,7 @@ class SecurityControlManager:
                 subset_security_controls.append(self.security_controls[index])
 
         return subset_security_controls
-        
+
 
 class SecurityControl:
     def __init__(self, name, cost, addressed_threats = []):
@@ -623,7 +629,7 @@ class SecurityControl:
         Return the threat benefits for that threat
         """
         ret = []
-        for s in security_controls: 
+        for s in security_controls:
             if s.address_threat(t):
                 threat_benefit = s.get_threat_benefit(t)
                 ret.append(threat_benefit)
@@ -635,7 +641,7 @@ class SecurityControl:
         security_controls = []
         with open(json_path) as f:
             data = json.load(f)
-            for d in data: 
+            for d in data:
                 cis_name = list(d.keys())[0]
                 info = d[cis_name]
                 addressed_threats = []
@@ -662,13 +668,13 @@ class Threat:
 
     def apply_threat_benefits(self, threat_benefits):
         """ Apply the threat benefits that reduce the probability
-        For each threat benefit obtained by the security controls that address the threat, 
-        reduce the threat. 
+        For each threat benefit obtained by the security controls that address the threat,
+        reduce the threat.
         Args:
             threat_benefits (List): The list of threat benefits that reduce the threat probability
         """
         dbg("Apply threat reduction for {}".format(self.tid))
-        for tb in threat_benefits: 
+        for tb in threat_benefits:
             prob_reduction = tb.prob_reduction
             dbg("Apply prob reduction of {}".format(prob_reduction))
             old_prob = self.p
@@ -717,7 +723,7 @@ class Threat:
                 if keyword == t.keyword and t.keyword != "dataExfiltration" and t.keyword != "ransomwareAttack":
                     ret = t
         return ret
-            
+
 
 
 
@@ -726,7 +732,7 @@ class Threat:
 
 
     # def get_cpt(self):
-        
+
 
 
 

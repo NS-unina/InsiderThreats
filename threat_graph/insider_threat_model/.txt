@@ -1,0 +1,125 @@
+1,"dataExfiltration(data,administrator_mail)","OR",0
+2,"RULE 14 (TID_17 - Data exfiltration from a company asset)","AND",0
+3,"tid17(_)","LEAF",1
+2,3,-1
+4,"sensitiveInformationThroughEmail(data,administrator_mail)","OR",0
+5,"RULE 17 (TID_06 - Sensitive information errounesly disclosed by mail)","AND",0
+6,"tid06(_)","LEAF",1
+5,6,-1
+7,"humanError(administrator)","LEAF",1
+5,7,-1
+8,"hasMailAccount(administrator)","LEAF",1
+5,8,-1
+9,"isSendingMail(administrator,administrator_mail)","LEAF",1
+5,9,-1
+4,5,-1
+2,4,-1
+1,2,-1
+10,"dataExfiltration(data,company_website)","OR",0
+11,"RULE 5 (TID_17 - Data exfiltration from a company asset)","AND",0
+11,3,-1
+12,"webDisclosureVulnerability(company_website,'SQLi')","OR",0
+13,"RULE 26 (TID_11 - A web vulnerability affects the webserver)","AND",0
+14,"tid11(_)","LEAF",1
+13,14,-1
+15,"isWeb('SQLi')","LEAF",1
+13,15,-1
+16,"vulExists(company_website,'SQLi',information_disclosure)","LEAF",1
+13,16,-1
+12,13,-1
+11,12,-1
+10,11,-1
+17,"dataExfiltration(data,daniel_workstation)","OR",0
+18,"RULE 11 (TID_17 - Data exfiltration from a company asset)","AND",0
+18,3,-1
+19,"skimmingDevice(internal_attacker,daniel_workstation)","OR",0
+20,"RULE 20 (TID_03 - The attacker installs a skimming device to exfiltrate data)","AND",0
+21,"tid03(_)","LEAF",1
+20,21,-1
+22,"hasPhysicalAccess(internal_attacker,daniel_workstation)","LEAF",1
+20,22,-1
+19,20,-1
+18,19,-1
+17,18,-1
+23,"RULE 12 (TID_17 - Data exfiltration from a company asset)","AND",0
+23,3,-1
+24,"getDataFromStolenAsset(_,daniel_workstation)","OR",0
+25,"RULE 25 (TID_10 - An attacker steals asset)","AND",0
+26,"tid10(_)","LEAF",1
+25,26,-1
+25,22,-1
+24,25,-1
+23,24,-1
+17,23,-1
+27,"dataExfiltration(data,elastic_search)","OR",0
+28,"RULE 8 (TID_17 - Data exfiltration from a company asset)","AND",0
+28,3,-1
+29,"unsecureDataStorage(elastic_search)","OR",0
+30,"RULE 19 (TID_01 - Unsecure data storage)","AND",0
+31,"tid01(_)","LEAF",1
+30,31,-1
+32,"isPublic(elastic_search)","LEAF",1
+30,32,-1
+30,7,-1
+33,"isAdminOf(administrator,elastic_search)","LEAF",1
+30,33,-1
+34,"isDataStorage(elastic_search)","LEAF",1
+30,34,-1
+29,30,-1
+28,29,-1
+27,28,-1
+35,"dataExfiltration(data,file_server)","OR",0
+36,"RULE 13 (TID_17 - Data exfiltration from a company asset)","AND",0
+36,3,-1
+37,"employeeStealsData(data,file_server)","OR",0
+38,"RULE 16 (TID_04 - An internal employee uses privileged access to steal sensitive data)","AND",0
+39,"tid04(_)","LEAF",1
+38,39,-1
+40,"hasAccess(daniel,file_server,exec)","LEAF",1
+38,40,-1
+41,"insiderness(daniel)","LEAF",1
+38,41,-1
+37,38,-1
+36,37,-1
+35,36,-1
+42,"RULE 7 (TID_17 - Data exfiltration from a company asset)","AND",0
+42,3,-1
+43,"spearPhishing(file_server,read)","OR",0
+44,"RULE 23 (TID_08 - An employee falls victim to a spear phising attack)","AND",0
+45,"tid08(_)","LEAF",1
+44,45,-1
+46,"hasAccess(charlie,file_server,read)","LEAF",1
+44,46,-1
+47,"unawareness(charlie)","LEAF",1
+44,47,-1
+48,"hasMailAccount(charlie)","LEAF",1
+44,48,-1
+43,44,-1
+42,43,-1
+35,42,-1
+49,"RULE 9 (TID_17 - Data exfiltration from a company asset)","AND",0
+49,3,-1
+50,"discoverWeakPassword(file_server,read)","OR",0
+51,"RULE 28 (TID_13 - An attacker discovers a weak password)","AND",0
+52,"tid13(_)","LEAF",1
+51,52,-1
+51,46,-1
+51,47,-1
+50,51,-1
+49,50,-1
+35,49,-1
+53,"ransomwareAttack(dns_server)","OR",0
+54,"RULE 0 (TID_02 - Ransomware attack against a target)","AND",0
+55,"tid02(_)","LEAF",1
+54,55,-1
+56,"execVulnerability(dns_server,'SigRED')","OR",0
+57,"RULE 21 (TID_05 - A service vulnerability allows code execution)","AND",0
+58,"tid05(_)","LEAF",1
+57,58,-1
+59,"noWeb('SigRED')","LEAF",1
+57,59,-1
+60,"vulExists(dns_server,'SigRED',code_exec)","LEAF",1
+57,60,-1
+56,57,-1
+54,56,-1
+53,54,-1
