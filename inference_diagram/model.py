@@ -8,6 +8,9 @@ from variables import *
 from functools import reduce
 from itertools import product
 
+from pgmpy.models import BayesianNetwork
+from pgmpy.factors.discrete.CPD import TabularCPD
+
 
 def pr(s):
     print("[+] {}".format(s))
@@ -150,10 +153,12 @@ class GumNode:
         self.is_or = is_or
 
     def is_leaf_node(self, id):
-        return len(self.diag.children(id)) == 0
+        # return len(self.diag.children(id)) == 0
+        return len(self.diag.get_children(node = id)) == 0
 
     def is_root_node(self, id):
-        return len(self.diag.parents(id)) == 0
+        # return len(self.diag.parents(id)) == 0
+        return len(self.diag.get_parents(node = id)) == 0
 
     def get_cpt(self):
         return self.diag.cpt(self.id)
@@ -169,10 +174,11 @@ class GumNode:
         Returns:
             gum nodes: A list of gum nodes
         """
-        names = diag.names()
+        names = diag.nodes()
         gum_nodes = []
         for n in names:
-            the_id = diag.idFromName(n)
+            # the_id = diag.idFromName(n)
+            the_id = n
             v = Vertex.find_by_name(vertices, n)
             gum_nodes.append(GumNode(diag, the_id, n, v.is_and(), v.is_or()))
         return gum_nodes
@@ -204,7 +210,8 @@ class GumUtils:
         self.no_arcs = 0
         self.nodes = []
         if diag is None:
-            self.diag = gum.BayesNet('BayesianThreatGraph')
+            # self.diag = gum.BayesNet('BayesianThreatGraph')
+            self.diag = BayesianNetwork()
         else:
             self.diag = diag
             #self.nodes = GumNode.generate_nodes(self.diag)
@@ -216,10 +223,10 @@ class GumUtils:
         return len(self.cpt_setted) < self.no_nodes
 
     def has_parents(self, id):
-        return len(self.diag.parents(id)) != 0
+        return len(self.diag.get_parents(node = id)) != 0
 
     def has_children(self, id):
-        return len(self.diag.children(id)) != 0
+        return len(self.diag.get_children(node = id)) != 0
 
     def get_root_nodes(self):
         return [n for n in self.nodes if n.is_root]
@@ -239,7 +246,7 @@ class GumUtils:
         return [n for n in self.nodes if n.is_leaf]
 
     def get_parents(self, name):
-        parents = self.diag.parents(name)
+        parents = self.diag.get_parents(node=name)
         return [n for n in self.nodes if n.id in parents]
 
     def get_gum_node(self, name):
@@ -252,7 +259,8 @@ class GumUtils:
     def generate_bayesian(self, vertices, arcs):
         dbg("Set vertices")
         for v in vertices:
-            self.diag.add(gum.LabelizedVariable(v.get_name(), v.text, 2))
+            # self.diag.add(gum.LabelizedVariable(v.get_name(), v.text, 2))
+            self.diag.add_node(v.get_name())
             self.no_nodes = self.no_nodes + 1
         dbg("Set arcs")
         dbg(len(arcs))
@@ -261,7 +269,8 @@ class GumUtils:
             dbg("Add arcs")
             dbg(i)
             i = i +1
-            self.diag.addArc(a.src.get_name(), a.dest.get_name())
+            self.diag.add_edge(a.src.get_name(), a.dest.get_name())
+            # self.diag.addArc(a.src.get_name(), a.dest.get_name())
             self.no_arcs = self.no_arcs + 1
         dbg("Generate nodes")
         self.nodes = GumNode.generate_nodes(self.diag, vertices)
@@ -317,15 +326,41 @@ class GumUtils:
             node_name (str): The node string
             cpts (array of Node objects): An array of nodes (tuples containing combinator and prob)
         """
+        combinations = []
+        evidences = []
+        one = []
+        two = []
+        cname = ""
         for c in cpts:
-            self.diag.cpt(node_name)[c.combination] = [c.prob.p_false, c.prob.p_true]
+            cc = list(c.combination.keys())
+            for com in cc: 
+                if com not in evidences:
+                    evidences.append(com)
+            # self.diag.cpt(node_name)[c.combination] = [c.prob.p_false, c.prob.p_true]
+            one.append(c.prob.p_false)
+            two.append(c.prob.p_true)
+        print(evidences)
+    
+        values = [one, two]
+        print(values)
+        cpd = TabularCPD(
+            variable = node_name, variable_card = 2, evidence = evidences, evidence_card = [2 for f in evidences], values=values
+        )
+        dbg("Add cpd")
+        self.diag.add_cpds(cpd)
+
 
     def set_root_cpt(self, node_name, prob):
         if prob == None:
             raise Exception("Prob cannot be None")
         # Set cpt only if not already setted
         if node_name not in self.cpt_setted:
-            self.diag.cpt(node_name).fillWith([1 - prob, prob])
+            cpd_node = TabularCPD(
+                variable = node_name, variable_card = 2, values=[[1 - prob], [prob]]
+            )
+            self.diag.add_cpds(cpd_node)
+
+            # self.diag.cpt(node_name).fillWith([1 - prob, prob])
             dbg("{} cpt configured".format(node_name))
             self.cpt_setted.append(node_name)
         else:
@@ -341,7 +376,10 @@ class GumUtils:
         names = self.get_parents_names(name)
         c = Combinator(names)
         all_one = Combinator.get_all_one_combination(c.combinations)
-        return self.diag.cpt(name)[all_one][1]
+        cpds = self.diag.get_cpds(node=name)
+        return cpds.get_values()[1][0]
+        
+        # return self.diag.cpt(name)[all_one][1]
 
 
 

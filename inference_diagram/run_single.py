@@ -119,7 +119,9 @@ if __name__ == "__main__":
 
     # gu = GumUtils()
     vertices = Vertex.from_csv(complete_folder(VERTICES_FILE))
+    arcs = Arc.from_csv(complete_folder(ARCS_FILE), vertices)
     pr("No vertices: {}".format(len(vertices)))
+    pr("No arcs: {}".format(len(arcs)))
 
     # Initialize the security control
     no_combinations = scm.get_no_combinations()
