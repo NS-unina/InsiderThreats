@@ -267,7 +267,7 @@ class GumUtils:
         self.nodes = GumNode.generate_nodes(self.diag, vertices)
 
     def generate_and_cpt(self, variable_name):
-        """Generate and cpt
+        """Generate and a
          - If a variable is 0, then the probability is 0
          - If all variables are 1, then the probability is given by and(parents)
 

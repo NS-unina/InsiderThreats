@@ -184,3 +184,6 @@ pyvenv.cfg
 
 result.csv
 spent_time.txt
+
+
+.DS_Store
