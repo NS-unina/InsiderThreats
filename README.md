@@ -28,7 +28,53 @@ make graph
 
 It will generate the files useful for the inference diagram:   
 * ARCS.CSV: the list of relationships between nodes   
-* VERTICES.CSV: the description of each node    
+* VERTICES.CSV: the description of each node        
+
+
+### Calculate the treewidth   
+Put the following alias in bashrc:   
+```  
+treewidth='docker run -v /Users/gx1/git/unina/InsiderThreat/InsiderThreats/tw-calculator/graph.gr:/PACE2017-TrackA/graphs/graph.gr -it --rm nsunina/treewidth'  
+```    
+
+Create a graph through the `graph.py` script by selecting a folder containing a `VERTICES.csv` and `ARCS.csv` file. 
+```  
+python graph.py test  > graph.gr && treewdith
+```  
+
+
+
+
+
+### Evaluation threat model scenarios     
+The `evaluation` folder contains the scenarios proposed in the article.   
+* `company_one` contains the scenario 1 (small company)
+* `company_two` contains the scenario 2 (medium company)  
+* `company_three` contains the scenario 3 (large company)   
+
+
+## Threat graph generator
+The `threat_model_generator.py` generates a new test model to try the environment. 
+
+You can select: 
+* the number of employess. 
+* the number of 
+
+To generate a new threat graph:  
+1. Generate with:   
+```  
+python threat_graph_generator.py > ../threat_graph/test/input.P    
+``` 
+2. Go in test folder and generate the graph   
+``` 
+cd threat_graph/test  
+make graph   
+```   
+
+3. Create fake asset records   
+``` 
+python generate_fake_assets.py test  
+```  
 
 ## Inference diageram   
 The inference diagram folder contains the source code to run the risk management inference algorithm.   

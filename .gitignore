@@ -187,3 +187,6 @@ spent_time.txt
 
 
 .DS_Store
+
+experiment_*
+graph.gr

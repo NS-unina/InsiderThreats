@@ -1,0 +1,41 @@
+unawareness(user0).
+humanError(user0).
+insiderness(user0).
+hasMailAccount(user0).
+isSendingMail(user0, user0_mail).
+hasAccess(user0, asset_0, exec).
+isDataStorage(asset_0).
+isPublic(asset_0).
+hasPhysicalAccess(Attacker, asset_0).
+unawareness(administrator0).
+humanError(administrator0).
+insiderness(administrator0).
+hasMailAccount(administrator0).
+isSendingMail(administrator0, administrator0_mail).
+isAdminOf(administrator0, _).
+hasAccess(administrator0, asset_0, exec).
+isDataStorage(asset_0).
+isPublic(asset_0).
+hasPhysicalAccess(Attacker, asset_0).
+noWeb('vuln_ransom_0').
+vulExists(asset_0, 'vuln_ransom_0', code_exec).
+
+
+
+/* Global threat probability */
+tid01(_).
+tid02(_).
+tid03(_).
+tid04(_).
+tid05(_).
+tid06(_).
+tid08(_).
+tid10(_).
+tid11(_).
+tid13(_).
+tid15(_).
+tid17(_).
+tid23(_).
+
+attackGoal(dataExfiltration(data, _)).
+attackGoal(ransomwareAttack(_)).

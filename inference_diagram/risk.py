@@ -38,9 +38,9 @@ class AssetImpact:
         """
         return lossFunction(self.no_records)
 
-    def from_csv():
+    def from_csv(fullpath):
         assets = []
-        df = pd.read_csv(folder_data(ASSETS_FILE))
+        df = pd.read_csv(fullpath)
         for i, row in df.iterrows():
             asset = AssetImpact(row[0], row[1])
             assets.append(asset)
@@ -59,7 +59,7 @@ class AssetImpact:
         for a in assets: 
             if a.asset == host_name:
                 return a
-        raise Exception("Asset not found")
+        raise Exception("Asset {} not found".format(host_name))
 
 
 class Risk:

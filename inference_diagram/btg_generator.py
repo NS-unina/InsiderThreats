@@ -91,15 +91,11 @@ def reduce_graph(vertices, arcs):
         
 
             
-def btg_generate(subset_security_controls):
-    if IS_SIMPLIFIED:
-        vertices = Vertex.from_csv(simplified_folder(VERTICES_FILE))
-        arcs = Arc.from_csv(simplified_folder(ARCS_FILE), vertices)
-        tids = Threat.from_csv(folder_data(TID_FILE))
-    else:
-        vertices = Vertex.from_csv(complete_folder(VERTICES_FILE))
-        arcs = Arc.from_csv(complete_folder(ARCS_FILE), vertices)
-        tids = Threat.from_csv(folder_data(TID_FILE))
+def btg_generate(subset_security_controls, file_path):
+    vertices = Vertex.from_csv(get_file(VERTICES_FILE, file_path))
+    arcs = Arc.from_csv(get_file(ARCS_FILE, file_path), vertices)
+    tids = Threat.from_csv(folder_data(TID_FILE))
+
     rules_vertices, rules_arcs = reduce_graph(vertices, arcs) 
     g = GumUtils()
     g.generate_bayesian(rules_vertices, rules_arcs)

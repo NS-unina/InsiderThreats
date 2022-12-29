@@ -21,6 +21,16 @@ def e():
 
 
 ## Folders that change depending on the threat model
+def get_file(filename, user_path = None):
+    if user_path:
+        return path.join(user_path, filename)
+
+    elif IS_SIMPLIFIED:
+        return simplified_folder(filename)
+    # Complete
+    else: 
+        return complete_folder(filename)
+
 def complete_folder(f):
   return path.join("complete", f)
 
@@ -414,7 +424,7 @@ class Vertex:
     return None
   def find_by_name(vertices, name):
       for v in vertices:
-          if name == v.get_name():
+          if str(name).strip() == str(v.get_name()).strip():
               return v
       return None
 
@@ -718,7 +728,10 @@ class Threat:
     def get_vector_threat(threats, vertex_text):
         ret = None
         for t in threats:
+            # Fix for service vuln
             keyword = Vertex.extract_keyword(vertex_text)
+            if keyword == "discloseVulnerability":
+                keyword = "webDisclosureVulnerability"
             if keyword:
                 if keyword == t.keyword and t.keyword != "dataExfiltration" and t.keyword != "ransomwareAttack":
                     ret = t

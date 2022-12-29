@@ -15,7 +15,6 @@ def ps():
 
 security_controls  = SecurityControl.from_json(folder_data('json_sc.json'))
 scm = SecurityControlManager(security_controls)
-assets = AssetImpact.from_csv()
 performance_list = []
 
 def cpt(gu, names):
@@ -56,7 +55,7 @@ class PerformanceCombination:
 
 
 
-def run_combination(no_combination):
+def run_combination(no_combination, file_path, assets):
     subset = scm.get_subset(no_combination)
     implementation_cost = scm.get_implementation_cost(subset)   
     dbg("No of implemented security controls: {}".format(len(subset)))
@@ -68,7 +67,7 @@ def run_combination(no_combination):
         2. Generate the bayesian threat graph 
         3. Setup the cpt
     """
-    gu = btg_generate(subset)
+    gu = btg_generate(subset, file_path)
 
 
 
@@ -116,20 +115,29 @@ def run_combination(no_combination):
     
 if __name__ == "__main__":
     #parser = argparse.ArgumentParser(description='Chose optimium SC')
-    
+    filepath = None
+    if len(sys.argv) > 1: 
+        filepath = sys.argv[1]
     # gu = GumUtils()
-    vertices = Vertex.from_csv(complete_folder(VERTICES_FILE))
+    vertices = Vertex.from_csv(get_file(VERTICES_FILE, filepath))
+    arcs = Arc.from_csv(get_file(ARCS_FILE, filepath), vertices)
     pr("No vertices: {}".format(len(vertices)))
+    pr("No edges: {}".format(len(arcs)))
     
     # Initialize the security control
     no_combinations = scm.get_no_combinations()
+    if filepath:
+        assets = AssetImpact.from_csv(get_file(ASSETS_FILE, filepath))
+    else:
+        assets = AssetImpact.from_csv(folder_data(ASSETS_FILE))
 
     pr("No security control combinations: {}".format(no_combinations))
     
     with open('result.csv', mode='w') as file:
         for i in range(0, no_combinations):
-            print("Combination no. {}".format(i))
-            performace_result = run_combination(i)
+            if i % 1000 == 0:
+                print("Combination no. {}".format(i))
+            performace_result = run_combination(i, filepath, assets)
             performance_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             performance_writer.writerow([performace_result.no_combination, performace_result.performance, performace_result.risk, performace_result.cost])
             performance_list.append(performace_result)

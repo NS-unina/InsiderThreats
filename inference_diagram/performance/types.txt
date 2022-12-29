@@ -1,4 +1,0 @@
-bool
-float64
-int64
-object
