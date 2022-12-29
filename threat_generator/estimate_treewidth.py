@@ -3,8 +3,6 @@ import sys
 import os
 from pathlib import Path
 import subprocess
-from datetime import datetime
-import time
 
 
 
@@ -32,14 +30,6 @@ def ransom(r):
     return int(r['Ransomware'])
 
 
-def time_millis():
-    obj = time.gmtime(0)
-    epoch = time.asctime(obj)
-    curr_time = round(time.time()*1000)
-    return curr_time
-
-
-
 def generate_command(r, name):
     return "python threat_graph_generator.py {} --employees {} --admins {} --assets {} --ransom {} --disclose {}".format(name, employee(r), admin(r), assets(r), disclosure(r), ransom(r))
 
@@ -58,26 +48,18 @@ if __name__ == "__main__":
         start = int(sys.argv[1])
         print("[+] Start from{}".format(start))
 
-    output_df = pd.DataFrame(columns = ['Employees', 'Admins', 'Assets', 'Disclose', 'Ransomware', 'Time'])
+    output_df = pd.DataFrame(columns = ['Employees', 'Admins', 'Assets', 'Disclose', 'Ransomware', 'Treewidth'])
 
-    for index, row in df.iterrows():
-        # print("Index: {}".format(index))
-        if index >= start and index < 3:
-            experiment_name = "experiment_{}".format(index)
-            print("Generate {}".format(experiment_name))
-
-            py_command = generate_command(row, experiment_name)
-            os.system(py_command)
-
-            
-            start_time = time_millis()
-            subprocess.check_output(gen_graph(experiment_name), shell=True)
-            end_time = time_millis()
-            interval = end_time - start_time
-            print("Time required: {}".format(interval))
-
-            # treewidth = int(subprocess.check_output(get_treewidth(experiment_name), shell=True))
-            df_row = pd.DataFrame.from_dict({'Employees' : [employee(row)], 'Admins': [admin(row)], 'Assets': [assets(row)], 'Disclose': [disclosure(row)], 'Ransomware' : [ransom(row)], 'Time': [interval]})
+    with open('results.csv', 'a') as f:
+        for index, row in df.iterrows():
+            # print("Index: {}".format(index))
+            if index >= start:
+                experiment_name = "experiment_{}".format(index)
+                py_command = generate_command(row, experiment_name)
+                os.system(py_command)
+                subprocess.check_output(gen_graph(experiment_name), shell=True)
+                # treewidth = int(subprocess.check_output(get_treewidth(experiment_name), shell=True))
+                # df_row = pd.DataFrame.from_dict({'Employees' : [employee(row)], 'Admins': [admin(row)], 'Assets': [assets(row)], 'Disclose': [disclosure(row)], 'Ransomware' : [ransom(row)], 'Treewidth': [treewidth]})
                 # f.write("{},{},{},{},{},{},{}\n".format(index, employee(row), admin(row), assets(row), disclosure(row), ransom(row), treewidth))
-            output_df = pd.concat([output_df, df_row], ignore_index=True)
-    output_df.to_csv("results.csv")
+        # output_df = pd.concat([output_df, df_row], ignore_index=True)
+    # output_df.to_csv("results.csv")
